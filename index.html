@@ -46,6 +46,7 @@
 
   <style>
     :root {
+      color-scheme: dark;
       --bg-primary: #101211;
       --bg-surface: #191D1B;
       --border-subtle: #2F3633;
@@ -65,6 +66,30 @@
 
     h1, h2, h3, .font-display {
       font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    }
+
+    /* Iconițe vizibile (albe/contrastante) pentru selectoarele de Dată și Oră */
+    input[type="date"],
+    input[type="time"] {
+      color-scheme: dark;
+      position: relative;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(1.3);
+      background-color: rgba(240, 240, 233, 0.14);
+      padding: 5px;
+      border-radius: 3px;
+      cursor: pointer;
+      opacity: 0.95;
+      transition: background-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator:hover,
+    input[type="time"]::-webkit-calendar-picker-indicator:hover {
+      background-color: rgba(240, 240, 233, 0.26);
+      opacity: 1;
     }
 
     ::-webkit-scrollbar {
@@ -394,7 +419,7 @@
           <p class="text-sm text-[#9A9E9B]">Se încarcă calendarul concursurilor...</p>
         </div>
 
-        <!-- Listă Concursuri -->
+        <!-- Listă Concursuri (include butoane rapide Editează / Șterge când ești logat ca Admin) -->
         <div id="tournaments-grid" class="hidden mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
         <!-- Mesaj listă goală -->
@@ -910,6 +935,7 @@
       const loadingBox = document.getElementById('tournaments-loading');
       const grid = document.getElementById('tournaments-grid');
       const emptyBox = document.getElementById('tournaments-empty');
+      const loggedIn = isAdminAuthenticated();
 
       if (loadingBox) loadingBox.classList.add('hidden');
 
@@ -930,6 +956,22 @@
         grid.classList.remove('hidden');
         grid.innerHTML = filtered.map((ev) => {
           const safeLink = normalizeExternalUrl(ev.externalLink);
+          const isConfirming = pendingDeleteId === ev.id;
+
+          const adminCardControls = loggedIn
+            ? `<div class="mt-4 pt-3 border-t border-[#2F3633] flex items-center justify-between gap-2">
+                <button type="button" data-edit-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#101211] hover:border-[#4A5550] text-xs font-medium text-[#F0F0E9] transition-colors">
+                  Editează
+                </button>
+                <div class="flex items-center gap-1.5">
+                  ${isConfirming
+                    ? `<button type="button" data-confirm-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] bg-[#7A2828] hover:bg-[#963232] text-xs font-semibold text-[#F0F0E9] transition-colors">Da, șterge</button>
+                       <button type="button" data-cancel-delete="1" class="px-2.5 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#101211] text-xs text-[#9A9E9B] hover:text-[#F0F0E9]">Nu</button>`
+                    : `<button type="button" data-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-xs font-medium text-[#F2B8B5] hover:text-white transition-colors">Șterge concursul</button>`}
+                </div>
+              </div>`
+            : '';
+
           return `
             <article class="p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633] hover:border-[#4A5550] transition-colors flex flex-col justify-between">
               <div>
@@ -954,11 +996,14 @@
                   : `<p class="text-sm text-[#6E7370] italic mb-5">Detalii disponibile la recepția clubului.</p>`}
               </div>
 
-              <div class="pt-4 border-t border-[#2F3633] flex items-center justify-between">
-                <span class="text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B]">Friends Room</span>
-                ${safeLink
-                  ? `<a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-[#F0F0E9] hover:text-[#9A9E9B] transition-colors">Înscriere / Detalii →</a>`
-                  : `<a href="#contact" class="text-xs font-medium uppercase tracking-[0.12em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Info la club →</a>`}
+              <div>
+                <div class="pt-4 border-t border-[#2F3633] flex items-center justify-between">
+                  <span class="text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B]">Friends Room</span>
+                  ${safeLink
+                    ? `<a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-[#F0F0E9] hover:text-[#9A9E9B] transition-colors">Înscriere / Detalii →</a>`
+                    : `<a href="#contact" class="text-xs font-medium uppercase tracking-[0.12em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Info la club →</a>`}
+                </div>
+                ${adminCardControls}
               </div>
             </article>`;
         }).join('');
@@ -1002,9 +1047,9 @@
                 Editează
               </button>
               ${isConfirming
-                ? `<button type="button" data-confirm-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] bg-[#5B2323] hover:bg-[#732C2C] text-xs font-medium text-[#F0F0E9] transition-colors">Confirmă ștergerea</button>
+                ? `<button type="button" data-confirm-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] bg-[#7A2828] hover:bg-[#963232] text-xs font-medium text-[#F0F0E9] transition-colors">Confirmă ștergerea</button>
                    <button type="button" data-cancel-delete="1" class="px-2.5 py-1.5 rounded-[2px] border border-[#2F3633] text-xs text-[#9A9E9B]">Anulează</button>`
-                : `<button type="button" data-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#2F3633] hover:border-[#5B2323] text-xs text-[#9A9E9B] hover:text-[#E57373] transition-colors">Șterge</button>`}
+                : `<button type="button" data-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-xs text-[#F2B8B5] hover:text-white transition-colors">Șterge</button>`}
             </div>
           </div>`;
       }).join('');
@@ -1027,6 +1072,8 @@
         dot.classList.add('bg-[#6E7370]');
         label.textContent = 'Admin';
       }
+
+      renderTournaments();
     }
 
     const tournamentsRef = ref(firebaseRtdb, 'tournaments');
@@ -1143,6 +1190,7 @@
       });
 
       document.getElementById('admin-logout-btn').addEventListener('click', async () => {
+        pendingDeleteId = null;
         await signOut(firebaseAuth);
       });
 
@@ -1223,9 +1271,11 @@
         }
       });
 
-      document.getElementById('admin-tournaments-list').addEventListener('click', async (e) => {
+      /* Handler comun pentru Editare / Ștergere atât din cardurile publice, cât și din Panoul Admin */
+      async function handleTournamentActionClick(e) {
         if (!isAdminAuthenticated()) return;
-        const target = e.target;
+        const target = e.target.closest('button');
+        if (!target) return;
 
         const editId = target.getAttribute('data-edit-id');
         if (editId) {
@@ -1269,7 +1319,10 @@
             showFormFeedback(translateFirebaseError(err.code), true);
           }
         }
-      });
+      }
+
+      document.getElementById('tournaments-grid').addEventListener('click', handleTournamentActionClick);
+      document.getElementById('admin-tournaments-list').addEventListener('click', handleTournamentActionClick);
 
       document.getElementById('change-password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
