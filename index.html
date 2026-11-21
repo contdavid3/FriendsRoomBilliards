@@ -14,7 +14,7 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Gestionare inteligentă a imaginilor (încarcă .jpeg/.jpg/.png/.webp sau afișează cadrul de rezervă) -->
+  <!-- Gestionare inteligentă a imaginilor (.jpeg / .jpg / .png / .webp + cadru de rezervă) -->
   <script>
     window.handleClubImageFallback = function (img, labelText) {
       if (!img) return;
@@ -67,7 +67,6 @@
       font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     }
 
-    /* Scrollbar discret */
     ::-webkit-scrollbar {
       width: 8px;
     }
@@ -82,7 +81,6 @@
       background: #3F4844;
     }
 
-    /* Animații discrete la derulare */
     .reveal {
       opacity: 0;
       transform: translateY(16px);
@@ -93,7 +91,6 @@
       transform: translateY(0);
     }
 
-    /* Textură arhitecturală subtilă */
     .bg-club-grid {
       background-image:
         linear-gradient(to right, rgba(47, 54, 51, 0.16) 1px, transparent 1px),
@@ -107,7 +104,6 @@
   <!-- ==================== NAVBAR ==================== -->
   <header class="sticky top-0 z-40 bg-[#101211]/95 backdrop-blur-md border-b border-[#2F3633]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
-      <!-- Brand / Logo -->
       <a href="#acasa" class="flex items-center gap-3.5 group focus:outline-none">
         <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-[2px] overflow-hidden border border-[#2F3633] bg-[#191D1B] flex items-center justify-center shrink-0">
           <img
@@ -129,7 +125,6 @@
         </div>
       </a>
 
-      <!-- Navigație Desktop -->
       <nav aria-label="Meniu principal" class="hidden md:flex items-center gap-7">
         <a href="#acasa" class="text-sm text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Acasă</a>
         <a href="#club" class="text-sm text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Club &amp; Facilități</a>
@@ -138,7 +133,6 @@
         <a href="#contact" class="text-sm text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Contact</a>
       </nav>
 
-      <!-- Acțiuni Dreapta -->
       <div class="flex items-center gap-3">
         <button
           id="nav-admin-btn"
@@ -149,7 +143,6 @@
           <span id="nav-admin-label">Admin</span>
         </button>
 
-        <!-- Buton Meniu Mobil -->
         <button
           id="mobile-menu-toggle"
           type="button"
@@ -167,7 +160,6 @@
       </div>
     </div>
 
-    <!-- Meniu Mobil -->
     <div id="mobile-menu" class="hidden md:hidden border-t border-[#2F3633] bg-[#101211]">
       <nav aria-label="Meniu mobil" class="max-w-6xl mx-auto px-4 py-4 flex flex-col gap-1">
         <a href="#acasa" class="mobile-nav-link px-3 py-2.5 rounded-[2px] text-sm text-[#9A9E9B] hover:text-[#F0F0E9] hover:bg-[#191D1B] transition-colors">Acasă</a>
@@ -216,7 +208,6 @@
             </div>
           </div>
 
-          <!-- Emblema Clubului -->
           <div class="lg:col-span-4 reveal is-visible">
             <div class="p-4 sm:p-5 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
               <div class="aspect-square w-full overflow-hidden rounded-[2px] border border-[#2F3633] bg-[#101211]">
@@ -237,7 +228,6 @@
           </div>
         </div>
 
-        <!-- Repere rapide -->
         <div class="mt-14 pt-10 border-t border-[#2F3633] grid grid-cols-1 sm:grid-cols-3 gap-6 reveal">
           <div class="p-5 rounded-[2px] bg-[#191D1B]/70 border border-[#2F3633]">
             <span class="block text-[11px] uppercase tracking-[0.18em] text-[#9A9E9B] mb-1.5">Echipament</span>
@@ -274,7 +264,6 @@
           </div>
         </div>
 
-        <!-- Fotografie Lounge -->
         <div class="mt-8 reveal">
           <div class="w-full h-[260px] sm:h-[400px] lg:h-[460px] rounded-[2px] overflow-hidden border border-[#2F3633] bg-[#191D1B]">
             <img
@@ -288,7 +277,6 @@
           </div>
         </div>
 
-        <!-- Detalii Facilități -->
         <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 reveal">
           <div class="p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
             <span class="text-xs font-semibold uppercase tracking-[0.16em] text-[#9A9E9B]">01 / Mese &amp; Iluminare</span>
@@ -327,7 +315,6 @@
     <section id="comunitate" class="py-16 sm:py-24 border-b border-[#2F3633] bg-[#121514]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center reveal">
-          <!-- Imagine Masa 10 -->
           <div class="lg:col-span-6">
             <div class="w-full h-[260px] sm:h-[360px] rounded-[2px] overflow-hidden border border-[#2F3633] bg-[#191D1B]">
               <img
@@ -341,7 +328,6 @@
             </div>
           </div>
 
-          <!-- Text Comunitate -->
           <div class="lg:col-span-6">
             <span class="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B] mb-2">
               Oameni &amp; Fair-Play
@@ -384,7 +370,6 @@
             </h2>
           </div>
 
-          <!-- Filtre Tip Bilă -->
           <div id="tournament-filters" class="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrează concursurile">
             <button type="button" data-filter="Toate" class="filter-btn px-3.5 py-2 rounded-[2px] text-xs font-medium uppercase tracking-[0.12em] bg-[#164D36] text-[#F0F0E9] border border-[#164D36] transition-colors">
               Toate
@@ -404,10 +389,13 @@
           </div>
         </div>
 
-        <!-- Listă Concursuri -->
-        <div id="tournaments-grid" class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Randat dinamic din JavaScript -->
+        <!-- Indicator încărcare Firestore -->
+        <div id="tournaments-loading" class="mt-8 p-8 rounded-[2px] bg-[#191D1B] border border-[#2F3633] text-center">
+          <p class="text-sm text-[#9A9E9B]">Se încarcă calendarul concursurilor...</p>
         </div>
+
+        <!-- Listă Concursuri -->
+        <div id="tournaments-grid" class="hidden mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
         <!-- Mesaj listă goală -->
         <div id="tournaments-empty" class="hidden mt-8 p-10 rounded-[2px] bg-[#191D1B] border border-[#2F3633] text-center">
@@ -418,14 +406,20 @@
       </div>
     </section>
 
-    <!-- ==================== PANOU ADMINISTRARE (VIZIBIL DOAR DUPĂ AUTENTIFICARE) ==================== -->
+    <!-- ==================== PANOU ADMINISTRARE (FIREBASE / LOCAL) ==================== -->
     <section id="admin-panel" class="hidden py-16 sm:py-20 border-b border-[#2F3633] bg-[#141716]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#2F3633]">
           <div>
-            <span class="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B] mb-1">
-              Administrare Club
-            </span>
+            <div class="flex flex-wrap items-center gap-3 mb-1.5">
+              <span class="text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B]">
+                Administrare Club
+              </span>
+              <span id="firebase-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[2px] text-[11px] font-medium bg-[#191D1B] border border-[#2F3633] text-[#9A9E9B]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span>
+                Firebase Cloud
+              </span>
+            </div>
             <h2 class="font-display text-2xl sm:text-3xl font-bold text-[#F0F0E9]">
               Panou Administrare Concursuri
             </h2>
@@ -438,6 +432,11 @@
           >
             Deconectare
           </button>
+        </div>
+
+        <!-- Notificare dacă firebaseConfig nu a fost încă completat -->
+        <div id="firebase-setup-notice" class="hidden mt-6 p-4 rounded-[2px] bg-[#191D1B] border border-[#8A6D2F] text-xs sm:text-sm text-[#E6D5A7]">
+          <strong>Atenție:</strong> Cheile din <code class="px-1.5 py-0.5 bg-[#101211] rounded">firebaseConfig</code> nu sunt completate încă. Datele se salvează momentan doar local în acest browser. Completează <code class="px-1.5 py-0.5 bg-[#101211] rounded">firebaseConfig</code> în cod pentru sincronizare live pe toate dispozitivele.
         </div>
 
         <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -538,6 +537,8 @@
                 ></textarea>
               </div>
 
+              <p id="form-feedback-msg" class="hidden text-xs text-[#2E9E6B]"></p>
+
               <button
                 type="submit"
                 id="submit-tournament-btn"
@@ -576,12 +577,19 @@
 
           <!-- Gestionare Concursuri Existente -->
           <div class="lg:col-span-6 p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
-            <h3 class="font-display text-lg font-semibold text-[#F0F0E9] mb-5">
-              Concursuri publicate (<span id="admin-tournaments-count">0</span>)
-            </h3>
-            <div id="admin-tournaments-list" class="space-y-3">
-              <!-- Randat dinamic -->
+            <div class="flex items-center justify-between gap-3 mb-5">
+              <h3 class="font-display text-lg font-semibold text-[#F0F0E9]">
+                Concursuri publicate (<span id="admin-tournaments-count">0</span>)
+              </h3>
+              <button
+                id="seed-demo-btn"
+                type="button"
+                class="hidden px-3 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#101211] hover:border-[#164D36] text-[11px] uppercase tracking-[0.1em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors"
+              >
+                + Adaugă exemple
+              </button>
             </div>
+            <div id="admin-tournaments-list" class="space-y-3"></div>
           </div>
         </div>
       </div>
@@ -633,7 +641,6 @@
             </div>
           </div>
 
-          <!-- Hartă Încorporată -->
           <div class="lg:col-span-7">
             <div class="w-full h-[320px] sm:h-[380px] rounded-[2px] overflow-hidden border border-[#2F3633] bg-[#191D1B]">
               <iframe
@@ -698,16 +705,16 @@
 
       <form id="admin-login-form" class="mt-6 space-y-4">
         <div>
-          <label for="login-username" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
-            Utilizator
+          <label id="login-user-label" for="login-identifier" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+            Email Administrator
           </label>
           <input
-            id="login-username"
+            id="login-identifier"
             type="text"
             required
-            value="Admin"
+            placeholder="admin@friendsroom.ro"
             autocomplete="username"
-            class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] focus:outline-none focus:border-[#164D36]"
+            class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] focus:outline-none focus:border-[#164D36]"
           />
         </div>
 
@@ -728,6 +735,7 @@
         <p id="login-error-msg" class="hidden text-xs text-[#E57373] bg-[#5B2323]/30 border border-[#5B2323] px-3 py-2 rounded-[2px]"></p>
 
         <button
+          id="login-submit-btn"
           type="submit"
           class="w-full py-3 px-4 rounded-[2px] bg-[#164D36] hover:bg-[#1D6346] text-[#F0F0E9] font-semibold text-sm transition-colors"
         >
@@ -737,675 +745,834 @@
     </div>
   </div>
 
-  <!-- ==================== LOGICĂ JAVASCRIPT ==================== -->
-  <script>
-    (function () {
-      'use strict';
+  <!-- ==================== INTEGRARE FIREBASE + LOGICĂ APLICAȚIE ==================== -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updatePassword
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      doc,
+      onSnapshot,
+      serverTimestamp
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
-      /* 1. Stocare sigură în memorie / localStorage */
-      var memoryFallback = {};
-      var safeStorage = {
-        getItem: function (key) {
-          try {
-            var val = window.localStorage.getItem(key);
-            if (val !== null) return val;
-          } catch (e) {}
-          return Object.prototype.hasOwnProperty.call(memoryFallback, key) ? memoryFallback[key] : null;
-        },
-        setItem: function (key, value) {
-          var str = String(value);
-          memoryFallback[key] = str;
-          try {
-            window.localStorage.setItem(key, str);
-          } catch (e) {}
-        },
-        removeItem: function (key) {
-          delete memoryFallback[key];
-          try {
-            window.localStorage.removeItem(key);
-          } catch (e) {}
-        }
-      };
+    /* =========================================================================
+       1. CONFIGURAȚIE FIREBASE (ÎNLOCUIEȘTE CU DATELE DIN FIREBASE CONSOLE)
+       Firebase Console -> Project Settings -> Your apps -> Web app -> firebaseConfig
+       ========================================================================= */
+    const firebaseConfig = {
+      apiKey: "PUNE_AICI_API_KEY",
+      authDomain: "PUNE_AICI_PROJECT_ID.firebaseapp.com",
+      projectId: "PUNE_AICI_PROJECT_ID",
+      storageBucket: "PUNE_AICI_PROJECT_ID.firebasestorage.app",
+      messagingSenderId: "PUNE_AICI_SENDER_ID",
+      appId: "PUNE_AICI_APP_ID"
+    };
 
-      /* 2. Implementare SHA-256 în JavaScript pur */
-      function sha256Hex(ascii) {
-        var str = unescape(encodeURIComponent(String(ascii == null ? '' : ascii)));
-        var mathPow = Math.pow;
-        var maxWord = mathPow(2, 32);
-        var result = '';
-        var words = [];
-        var asciiBitLength = str.length * 8;
-        var hash = [
-          0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-          0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
-        ];
-        var k = [
-          0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-          0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-          0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-          0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-          0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-          0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-          0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-          0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
-        ];
+    const isFirebaseConfigured = Boolean(
+      firebaseConfig.apiKey &&
+      !firebaseConfig.apiKey.startsWith('PUNE_AICI') &&
+      firebaseConfig.projectId &&
+      !firebaseConfig.projectId.startsWith('PUNE_AICI')
+    );
 
-        function rightRotate(value, amount) {
-          return (value >>> amount) | (value << (32 - amount));
-        }
+    let firebaseApp = null;
+    let firebaseAuth = null;
+    let firebaseDb = null;
 
-        for (var i = 0; i < str.length; i++) {
-          var j = str.charCodeAt(i);
-          words[i >> 2] |= j << (((3 - i) % 4) * 8);
-        }
-        words[asciiBitLength >> 5] |= 0x80 << (24 - (asciiBitLength % 32));
-        words[(((asciiBitLength + 64) >> 9) << 4) + 15] = asciiBitLength;
-
-        var w = new Array(64);
-        for (var idx = 0; idx < words.length; idx += 16) {
-          var oldHash = hash.slice(0);
-          for (var t = 0; t < 64; t++) {
-            if (t < 16) {
-              w[t] = words[idx + t] | 0;
-            } else {
-              var gamma0x = w[t - 15];
-              var gamma0 = rightRotate(gamma0x, 7) ^ rightRotate(gamma0x, 18) ^ (gamma0x >>> 3);
-              var gamma1x = w[t - 2];
-              var gamma1 = rightRotate(gamma1x, 17) ^ rightRotate(gamma1x, 19) ^ (gamma1x >>> 10);
-              w[t] = (w[t - 16] + gamma0 + w[t - 7] + gamma1) | 0;
-            }
-
-            var ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
-            var maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
-            var sigma0 = rightRotate(hash[0], 2) ^ rightRotate(hash[0], 13) ^ rightRotate(hash[0], 22);
-            var sigma1 = rightRotate(hash[4], 6) ^ rightRotate(hash[4], 11) ^ rightRotate(hash[4], 25);
-
-            var temp1 = (hash[7] + sigma1 + ch + k[t] + w[t]) | 0;
-            var temp2 = (sigma0 + maj) | 0;
-
-            hash[7] = hash[6];
-            hash[6] = hash[5];
-            hash[5] = hash[4];
-            hash[4] = (hash[3] + temp1) | 0;
-            hash[3] = hash[2];
-            hash[2] = hash[1];
-            hash[1] = hash[0];
-            hash[0] = (temp1 + temp2) | 0;
-          }
-          for (var h = 0; h < 8; h++) {
-            hash[h] = (hash[h] + oldHash[h]) | 0;
-          }
-        }
-
-        for (var m = 0; m < 8; m++) {
-          for (var n = 3; n + 1; n--) {
-            var b = (hash[m] >> (n * 8)) & 255;
-            result += (b < 16 ? '0' : '') + b.toString(16);
-          }
-        }
-        return result;
+    if (isFirebaseConfigured) {
+      try {
+        firebaseApp = initializeApp(firebaseConfig);
+        firebaseAuth = getAuth(firebaseApp);
+        firebaseDb = getFirestore(firebaseApp);
+      } catch (err) {
+        console.error('Eroare la inițializarea Firebase:', err);
       }
+    }
 
-      function generateSafeSalt() {
-        try {
-          if (window.crypto && window.crypto.getRandomValues) {
-            var arr = new Uint32Array(4);
-            window.crypto.getRandomValues(arr);
-            return Array.prototype.map.call(arr, function (n) {
-              return n.toString(16).padStart(8, '0');
-            }).join('');
-          }
-        } catch (e) {}
-        return Date.now().toString(16) + Math.random().toString(16).slice(2);
+    const useCloudBackend = Boolean(firebaseAuth && firebaseDb);
+
+    /* =========================================================================
+       2. STOCARE LOCALĂ DE REZERVĂ (CÂND FIREBASE NU ESTE ÎNCĂ CONFIGURAT)
+       ========================================================================= */
+    const STORAGE_KEYS = {
+      ADMIN_CONFIG: 'frb_admin_config_v1',
+      ADMIN_SESSION: 'frb_admin_session_v1',
+      TOURNAMENTS: 'frb_tournaments_v1'
+    };
+
+    const INITIAL_LOCAL_ADMIN = {
+      username: 'Admin',
+      passwordHash: '2da67f9647e3fc43527bcdfcd438024ef22e68f5e1e6cfafac9c6cab84ce28df',
+      salt: ''
+    };
+
+    const DEFAULT_TOURNAMENTS = [
+      {
+        id: 'frb-demo-1',
+        title: 'Open Friends Room — Bila 9',
+        gameType: 'Bila 9',
+        date: '2026-11-28',
+        time: '17:00',
+        description: 'Sistem piramidă dublă, câștigător sparge. Înscrierile se fac la bar cu 30 de minute înainte de start.',
+        externalLink: ''
+      },
+      {
+        id: 'frb-demo-2',
+        title: 'Seara Campionilor — Bila 8',
+        gameType: 'Bila 8',
+        date: '2026-12-05',
+        time: '18:00',
+        description: 'Competiție deschisă tuturor jucătorilor clubului. Meciuri disputate după regulamentul standard WPA.',
+        externalLink: ''
+      },
+      {
+        id: 'frb-demo-3',
+        title: 'Challenge de Iarnă — Bila 10',
+        gameType: 'Bila 10',
+        date: '2026-12-12',
+        time: '16:30',
+        description: 'Format cu lovitură anunțată pentru precizie maximă la masă.',
+        externalLink: ''
       }
+    ];
 
-      /* 3. Configurație Inițială și Constante */
-      var STORAGE_KEYS = {
-        ADMIN_CONFIG: 'frb_admin_config_v1',
-        ADMIN_SESSION: 'frb_admin_session_v1',
-        TOURNAMENTS: 'frb_tournaments_v1'
-      };
-
-      var INITIAL_ADMIN_CONFIG = {
-        username: 'Admin',
-        passwordHash: '2da67f9647e3fc43527bcdfcd438024ef22e68f5e1e6cfafac9c6cab84ce28df',
-        salt: ''
-      };
-
-      var RO_MONTHS_SHORT = ['ian.', 'feb.', 'mar.', 'apr.', 'mai', 'iun.', 'iul.', 'aug.', 'sept.', 'oct.', 'nov.', 'dec.'];
-
-      var DEFAULT_TOURNAMENTS = [
-        {
-          id: 'frb-1',
-          title: 'Open Friends Room — Bila 9',
-          gameType: 'Bila 9',
-          date: '2026-11-28',
-          time: '17:00',
-          description: 'Sistem piramidă dublă, câștigător sparge. Înscrierile se fac la bar cu 30 de minute înainte de start.',
-          externalLink: ''
-        },
-        {
-          id: 'frb-2',
-          title: 'Seara Campionilor — Bila 8',
-          gameType: 'Bila 8',
-          date: '2026-12-05',
-          time: '18:00',
-          description: 'Competiție deschisă tuturor jucătorilor clubului. Meciuri disputate după regulamentul standard WPA.',
-          externalLink: ''
-        },
-        {
-          id: 'frb-3',
-          title: 'Challenge de Iarnă — Bila 10',
-          gameType: 'Bila 10',
-          date: '2026-12-12',
-          time: '16:30',
-          description: 'Format cu lovitură anunțată pentru precizie maximă la masă.',
-          externalLink: ''
-        }
+    function sha256Hex(ascii) {
+      const str = unescape(encodeURIComponent(String(ascii == null ? '' : ascii)));
+      const words = [];
+      const asciiBitLength = str.length * 8;
+      const hash = [
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+        0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
       ];
+      const k = [
+        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+      ];
+      const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
 
-      /* 4. Utilitare Date & Formatare */
-      function formatDateRo(dateStr) {
-        var clean = String(dateStr || '').trim();
-        var match = clean.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-        if (!match) return clean || 'Dată nestabilită';
-        var year = match[1];
-        var monthIdx = parseInt(match[2], 10) - 1;
-        var day = parseInt(match[3], 10);
-        if (monthIdx < 0 || monthIdx > 11 || isNaN(day)) return clean;
-        return day + ' ' + RO_MONTHS_SHORT[monthIdx] + ' ' + year;
+      for (let i = 0; i < str.length; i++) {
+        words[i >> 2] |= str.charCodeAt(i) << (((3 - i) % 4) * 8);
       }
+      words[asciiBitLength >> 5] |= 0x80 << (24 - (asciiBitLength % 32));
+      words[(((asciiBitLength + 64) >> 9) << 4) + 15] = asciiBitLength;
 
-      function normalizeExternalUrl(rawUrl) {
-        var trimmed = String(rawUrl || '').trim();
-        if (!trimmed) return '';
-        if (!/^https?:\/\//i.test(trimmed)) {
-          trimmed = 'https://' + trimmed;
+      const w = new Array(64);
+      for (let idx = 0; idx < words.length; idx += 16) {
+        const oldHash = hash.slice(0);
+        for (let t = 0; t < 64; t++) {
+          if (t < 16) {
+            w[t] = words[idx + t] | 0;
+          } else {
+            const gamma0x = w[t - 15];
+            const gamma0 = rightRotate(gamma0x, 7) ^ rightRotate(gamma0x, 18) ^ (gamma0x >>> 3);
+            const gamma1x = w[t - 2];
+            const gamma1 = rightRotate(gamma1x, 17) ^ rightRotate(gamma1x, 19) ^ (gamma1x >>> 10);
+            w[t] = (w[t - 16] + gamma0 + w[t - 7] + gamma1) | 0;
+          }
+          const ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
+          const maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
+          const sigma0 = rightRotate(hash[0], 2) ^ rightRotate(hash[0], 13) ^ rightRotate(hash[0], 22);
+          const sigma1 = rightRotate(hash[4], 6) ^ rightRotate(hash[4], 11) ^ rightRotate(hash[4], 25);
+          const temp1 = (hash[7] + sigma1 + ch + k[t] + w[t]) | 0;
+          const temp2 = (sigma0 + maj) | 0;
+
+          hash[7] = hash[6];
+          hash[6] = hash[5];
+          hash[5] = hash[4];
+          hash[4] = (hash[3] + temp1) | 0;
+          hash[3] = hash[2];
+          hash[2] = hash[1];
+          hash[1] = hash[0];
+          hash[0] = (temp1 + temp2) | 0;
         }
-        try {
-          var parsed = new URL(trimmed);
-          if (!parsed.hostname || parsed.hostname.indexOf('.') === -1) return '';
-          return parsed.toString();
-        } catch (e) {
-          return '';
+        for (let h = 0; h < 8; h++) {
+          hash[h] = (hash[h] + oldHash[h]) | 0;
         }
       }
 
-      function escapeHtml(str) {
-        return String(str == null ? '' : str)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-      }
-
-      function getGameBadgeConfig(gameType) {
-        switch (String(gameType || 'Bila 8')) {
-          case 'Bila 7':
-            return { num: '7', ballBg: 'bg-[#5B2323]', striped: false };
-          case 'Bila 8':
-            return { num: '8', ballBg: 'bg-[#101211]', striped: false };
-          case 'Bila 9':
-            return { num: '9', ballBg: 'bg-[#8A6D2F]', striped: true };
-          case 'Bila 10':
-            return { num: '10', ballBg: 'bg-[#24435C]', striped: true };
-          default:
-            return { num: '8', ballBg: 'bg-[#101211]', striped: false };
+      let result = '';
+      for (let m = 0; m < 8; m++) {
+        for (let n = 3; n + 1; n--) {
+          const b = (hash[m] >> (n * 8)) & 255;
+          result += (b < 16 ? '0' : '') + b.toString(16);
         }
       }
+      return result;
+    }
 
-      function renderBallGraphic(gameType) {
-        var cfg = getGameBadgeConfig(gameType);
-        if (cfg.striped) {
-          return (
-            '<span class="relative w-8 h-8 rounded-full bg-[#F0F0E9] border border-[#2F3633] flex items-center justify-center overflow-hidden shrink-0 shadow-inner">' +
-              '<span class="absolute inset-x-0 h-4 ' + cfg.ballBg + '"></span>' +
-              '<span class="relative z-10 w-4 h-4 rounded-full bg-[#F0F0E9] text-[#101211] text-[10px] font-bold flex items-center justify-center leading-none">' +
-                cfg.num +
-              '</span>' +
-            '</span>'
-          );
-        }
-        return (
-          '<span class="relative w-8 h-8 rounded-full ' + cfg.ballBg + ' border border-[#2F3633] flex items-center justify-center shrink-0 shadow-inner">' +
-            '<span class="w-4 h-4 rounded-full bg-[#F0F0E9] text-[#101211] text-[10px] font-bold flex items-center justify-center leading-none">' +
-              cfg.num +
-            '</span>' +
-          '</span>'
-        );
-      }
-
-      /* 5. Stare Aplicație */
-      var activeFilter = 'Toate';
-      var pendingDeleteId = null;
-
-      function loadAdminConfig() {
-        var raw = safeStorage.getItem(STORAGE_KEYS.ADMIN_CONFIG);
-        if (!raw) return INITIAL_ADMIN_CONFIG;
-        try {
-          var parsed = JSON.parse(raw);
-          if (parsed && parsed.username && parsed.passwordHash) return parsed;
-        } catch (e) {}
-        return INITIAL_ADMIN_CONFIG;
-      }
-
-      function isAdminLoggedIn() {
-        return safeStorage.getItem(STORAGE_KEYS.ADMIN_SESSION) === 'authenticated';
-      }
-
-      function loadTournaments() {
-        var raw = safeStorage.getItem(STORAGE_KEYS.TOURNAMENTS);
+    function loadLocalTournaments() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.TOURNAMENTS);
         if (!raw) {
-          saveTournaments(DEFAULT_TOURNAMENTS);
+          localStorage.setItem(STORAGE_KEYS.TOURNAMENTS, JSON.stringify(DEFAULT_TOURNAMENTS));
           return DEFAULT_TOURNAMENTS.slice();
         }
-        try {
-          var parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) return parsed;
-        } catch (e) {}
-        return DEFAULT_TOURNAMENTS.slice();
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {}
+      return DEFAULT_TOURNAMENTS.slice();
+    }
+
+    function saveLocalTournaments(list) {
+      try {
+        localStorage.setItem(STORAGE_KEYS.TOURNAMENTS, JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    /* =========================================================================
+       3. UTILITARE FORMATARE ȘI UI
+       ========================================================================= */
+    const RO_MONTHS_SHORT = ['ian.', 'feb.', 'mar.', 'apr.', 'mai', 'iun.', 'iul.', 'aug.', 'sept.', 'oct.', 'nov.', 'dec.'];
+
+    function formatDateRo(dateStr) {
+      const clean = String(dateStr || '').trim();
+      const match = clean.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return clean || 'Dată nestabilită';
+      const year = match[1];
+      const monthIdx = parseInt(match[2], 10) - 1;
+      const day = parseInt(match[3], 10);
+      if (monthIdx < 0 || monthIdx > 11 || isNaN(day)) return clean;
+      return `${day} ${RO_MONTHS_SHORT[monthIdx]} ${year}`;
+    }
+
+    function normalizeExternalUrl(rawUrl) {
+      let trimmed = String(rawUrl || '').trim();
+      if (!trimmed) return '';
+      if (!/^https?:\/\//i.test(trimmed)) trimmed = 'https://' + trimmed;
+      try {
+        const parsed = new URL(trimmed);
+        if (!parsed.hostname || !parsed.hostname.includes('.')) return '';
+        return parsed.toString();
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderBallGraphic(gameType) {
+      let num = '8';
+      let ballBg = 'bg-[#101211]';
+      let striped = false;
+
+      switch (String(gameType || 'Bila 8')) {
+        case 'Bila 7':
+          num = '7';
+          ballBg = 'bg-[#5B2323]';
+          break;
+        case 'Bila 8':
+          num = '8';
+          ballBg = 'bg-[#101211]';
+          break;
+        case 'Bila 9':
+          num = '9';
+          ballBg = 'bg-[#8A6D2F]';
+          striped = true;
+          break;
+        case 'Bila 10':
+          num = '10';
+          ballBg = 'bg-[#24435C]';
+          striped = true;
+          break;
       }
 
-      function saveTournaments(list) {
-        safeStorage.setItem(STORAGE_KEYS.TOURNAMENTS, JSON.stringify(list));
+      if (striped) {
+        return `
+          <span class="relative w-8 h-8 rounded-full bg-[#F0F0E9] border border-[#2F3633] flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+            <span class="absolute inset-x-0 h-4 ${ballBg}"></span>
+            <span class="relative z-10 w-4 h-4 rounded-full bg-[#F0F0E9] text-[#101211] text-[10px] font-bold flex items-center justify-center leading-none">${num}</span>
+          </span>`;
       }
+      return `
+        <span class="relative w-8 h-8 rounded-full ${ballBg} border border-[#2F3633] flex items-center justify-center shrink-0 shadow-inner">
+          <span class="w-4 h-4 rounded-full bg-[#F0F0E9] text-[#101211] text-[10px] font-bold flex items-center justify-center leading-none">${num}</span>
+        </span>`;
+    }
 
-      /* 6. Randare Concursuri Publice & Admin */
-      function renderTournaments() {
-        var all = loadTournaments().slice().sort(function (a, b) {
-          return String(a.date + ' ' + a.time).localeCompare(String(b.date + ' ' + b.time));
-        });
-
-        var filtered = activeFilter === 'Toate'
-          ? all
-          : all.filter(function (item) { return item.gameType === activeFilter; });
-
-        var grid = document.getElementById('tournaments-grid');
-        var emptyBox = document.getElementById('tournaments-empty');
-
-        if (!filtered.length) {
-          grid.innerHTML = '';
-          emptyBox.classList.remove('hidden');
-        } else {
-          emptyBox.classList.add('hidden');
-          grid.innerHTML = filtered.map(function (ev) {
-            var safeLink = normalizeExternalUrl(ev.externalLink);
-            return (
-              '<article class="p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633] hover:border-[#4A5550] transition-colors flex flex-col justify-between">' +
-                '<div>' +
-                  '<div class="flex items-center justify-between gap-3 mb-5">' +
-                    '<div class="inline-flex items-center gap-2.5">' +
-                      renderBallGraphic(ev.gameType) +
-                      '<span class="px-2.5 py-1 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[11px] font-medium uppercase tracking-[0.14em] text-[#F0F0E9]">' +
-                        escapeHtml(ev.gameType) +
-                      '</span>' +
-                    '</div>' +
-                    '<span class="text-xs font-medium text-[#9A9E9B]">' +
-                      escapeHtml(formatDateRo(ev.date)) + ' • ' + escapeHtml(ev.time || '') +
-                    '</span>' +
-                  '</div>' +
-
-                  '<h3 class="font-display text-lg sm:text-xl font-semibold text-[#F0F0E9] leading-snug mb-3">' +
-                    escapeHtml(ev.title) +
-                  '</h3>' +
-
-                  (ev.description
-                    ? '<p class="text-sm text-[#9A9E9B] leading-relaxed mb-5">' + escapeHtml(ev.description) + '</p>'
-                    : '<p class="text-sm text-[#6E7370] italic mb-5">Detalii disponibile la recepția clubului.</p>') +
-                '</div>' +
-
-                '<div class="pt-4 border-t border-[#2F3633] flex items-center justify-between">' +
-                  '<span class="text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B]">Friends Room</span>' +
-                  (safeLink
-                    ? '<a href="' + escapeHtml(safeLink) + '" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-[#F0F0E9] hover:text-[#9A9E9B] transition-colors">Înscriere / Detalii →</a>'
-                    : '<a href="#contact" class="text-xs font-medium uppercase tracking-[0.12em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Info la club →</a>') +
-                '</div>' +
-              '</article>'
-            );
-          }).join('');
-        }
-
-        renderAdminList(all);
+    function translateFirebaseAuthError(code) {
+      switch (code) {
+        case 'auth/invalid-email':
+          return 'Adresa de email nu este validă.';
+        case 'auth/user-disabled':
+          return 'Acest cont de administrator este dezactivat.';
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+          return 'Email sau parolă incorectă.';
+        case 'auth/too-many-requests':
+          return 'Prea multe încercări. Așteaptă câteva minute.';
+        case 'auth/requires-recent-login':
+          return 'Deconectează-te și autentifică-te din nou înainte de a schimba parola.';
+        default:
+          return 'Eroare la autentificare. Verifică datele introduse.';
       }
+    }
 
-      function renderAdminList(all) {
-        var listEl = document.getElementById('admin-tournaments-list');
-        var countEl = document.getElementById('admin-tournaments-count');
-        if (!listEl || !countEl) return;
+    /* =========================================================================
+       4. STARE APLICAȚIE ȘI RANDARE
+       ========================================================================= */
+    let tournamentsState = [];
+    let activeFilter = 'Toate';
+    let pendingDeleteId = null;
+    let currentAdminUser = null;
 
-        countEl.textContent = String(all.length);
+    function isAdminAuthenticated() {
+      if (useCloudBackend) return Boolean(currentAdminUser);
+      try {
+        return localStorage.getItem(STORAGE_KEYS.ADMIN_SESSION) === 'authenticated';
+      } catch (e) {
+        return false;
+      }
+    }
 
-        if (!all.length) {
-          listEl.innerHTML = '<p class="text-sm text-[#9A9E9B]">Nu există concursuri publicate momentan.</p>';
-          return;
-        }
+    function renderTournaments() {
+      const loadingBox = document.getElementById('tournaments-loading');
+      const grid = document.getElementById('tournaments-grid');
+      const emptyBox = document.getElementById('tournaments-empty');
 
-        listEl.innerHTML = all.map(function (ev) {
-          var isConfirmingDelete = pendingDeleteId === ev.id;
-          return (
-            '<div class="p-4 rounded-[2px] bg-[#101211] border border-[#2F3633] flex flex-col sm:flex-row sm:items-center justify-between gap-3">' +
-              '<div>' +
-                '<div class="flex items-center gap-2 text-xs text-[#9A9E9B] mb-1">' +
-                  '<span class="text-[#F0F0E9] font-medium">' + escapeHtml(ev.gameType) + '</span>' +
-                  '<span>•</span>' +
-                  '<span>' + escapeHtml(formatDateRo(ev.date)) + ' (' + escapeHtml(ev.time) + ')</span>' +
-                '</div>' +
-                '<h4 class="text-sm font-semibold text-[#F0F0E9]">' + escapeHtml(ev.title) + '</h4>' +
-              '</div>' +
+      if (loadingBox) loadingBox.classList.add('hidden');
 
-              '<div class="flex items-center gap-2 shrink-0">' +
-                '<button type="button" data-edit-id="' + escapeHtml(ev.id) + '" class="px-3 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-xs text-[#F0F0E9] transition-colors">' +
-                  'Editează' +
-                '</button>' +
-                (isConfirmingDelete
-                  ? '<button type="button" data-confirm-delete-id="' + escapeHtml(ev.id) + '" class="px-3 py-1.5 rounded-[2px] bg-[#5B2323] hover:bg-[#732C2C] text-xs font-medium text-[#F0F0E9] transition-colors">Confirmă ștergerea</button>' +
-                    '<button type="button" data-cancel-delete="1" class="px-2.5 py-1.5 rounded-[2px] border border-[#2F3633] text-xs text-[#9A9E9B]">Anulează</button>'
-                  : '<button type="button" data-delete-id="' + escapeHtml(ev.id) + '" class="px-3 py-1.5 rounded-[2px] border border-[#2F3633] hover:border-[#5B2323] text-xs text-[#9A9E9B] hover:text-[#E57373] transition-colors">Șterge</button>') +
-              '</div>' +
-            '</div>'
-          );
+      const sorted = tournamentsState.slice().sort((a, b) =>
+        String(`${a.date} ${a.time}`).localeCompare(String(`${b.date} ${b.time}`))
+      );
+
+      const filtered = activeFilter === 'Toate'
+        ? sorted
+        : sorted.filter((item) => item.gameType === activeFilter);
+
+      if (!filtered.length) {
+        grid.classList.add('hidden');
+        grid.innerHTML = '';
+        emptyBox.classList.remove('hidden');
+      } else {
+        emptyBox.classList.add('hidden');
+        grid.classList.remove('hidden');
+        grid.innerHTML = filtered.map((ev) => {
+          const safeLink = normalizeExternalUrl(ev.externalLink);
+          return `
+            <article class="p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633] hover:border-[#4A5550] transition-colors flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-3 mb-5">
+                  <div class="inline-flex items-center gap-2.5">
+                    ${renderBallGraphic(ev.gameType)}
+                    <span class="px-2.5 py-1 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[11px] font-medium uppercase tracking-[0.14em] text-[#F0F0E9]">
+                      ${escapeHtml(ev.gameType)}
+                    </span>
+                  </div>
+                  <span class="text-xs font-medium text-[#9A9E9B]">
+                    ${escapeHtml(formatDateRo(ev.date))} • ${escapeHtml(ev.time || '')}
+                  </span>
+                </div>
+
+                <h3 class="font-display text-lg sm:text-xl font-semibold text-[#F0F0E9] leading-snug mb-3">
+                  ${escapeHtml(ev.title)}
+                </h3>
+
+                ${ev.description
+                  ? `<p class="text-sm text-[#9A9E9B] leading-relaxed mb-5">${escapeHtml(ev.description)}</p>`
+                  : `<p class="text-sm text-[#6E7370] italic mb-5">Detalii disponibile la recepția clubului.</p>`}
+              </div>
+
+              <div class="pt-4 border-t border-[#2F3633] flex items-center justify-between">
+                <span class="text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B]">Friends Room</span>
+                ${safeLink
+                  ? `<a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-[#F0F0E9] hover:text-[#9A9E9B] transition-colors">Înscriere / Detalii →</a>`
+                  : `<a href="#contact" class="text-xs font-medium uppercase tracking-[0.12em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Info la club →</a>`}
+              </div>
+            </article>`;
         }).join('');
       }
 
-      /* 7. Actualizare UI Autentificare Admin */
-      function syncAdminUI() {
-        var loggedIn = isAdminLoggedIn();
-        var panel = document.getElementById('admin-panel');
-        var dot = document.getElementById('nav-admin-dot');
-        var label = document.getElementById('nav-admin-label');
+      renderAdminList(sorted);
+    }
 
-        if (loggedIn) {
-          panel.classList.remove('hidden');
-          dot.classList.remove('bg-[#6E7370]');
-          dot.classList.add('bg-[#2E9E6B]');
-          label.textContent = 'Panou Admin';
-        } else {
-          panel.classList.add('hidden');
-          dot.classList.remove('bg-[#2E9E6B]');
-          dot.classList.add('bg-[#6E7370]');
-          label.textContent = 'Admin';
+    function renderAdminList(sortedAll) {
+      const listEl = document.getElementById('admin-tournaments-list');
+      const countEl = document.getElementById('admin-tournaments-count');
+      const seedBtn = document.getElementById('seed-demo-btn');
+      if (!listEl || !countEl) return;
+
+      countEl.textContent = String(sortedAll.length);
+      if (seedBtn) {
+        if (sortedAll.length === 0) seedBtn.classList.remove('hidden');
+        else seedBtn.classList.add('hidden');
+      }
+
+      if (!sortedAll.length) {
+        listEl.innerHTML = '<p class="text-sm text-[#9A9E9B]">Nu există concursuri publicate momentan.</p>';
+        return;
+      }
+
+      listEl.innerHTML = sortedAll.map((ev) => {
+        const isConfirming = pendingDeleteId === ev.id;
+        return `
+          <div class="p-4 rounded-[2px] bg-[#101211] border border-[#2F3633] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-[#9A9E9B] mb-1">
+                <span class="text-[#F0F0E9] font-medium">${escapeHtml(ev.gameType)}</span>
+                <span>•</span>
+                <span>${escapeHtml(formatDateRo(ev.date))} (${escapeHtml(ev.time)})</span>
+              </div>
+              <h4 class="text-sm font-semibold text-[#F0F0E9]">${escapeHtml(ev.title)}</h4>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" data-edit-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-xs text-[#F0F0E9] transition-colors">
+                Editează
+              </button>
+              ${isConfirming
+                ? `<button type="button" data-confirm-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] bg-[#5B2323] hover:bg-[#732C2C] text-xs font-medium text-[#F0F0E9] transition-colors">Confirmă ștergerea</button>
+                   <button type="button" data-cancel-delete="1" class="px-2.5 py-1.5 rounded-[2px] border border-[#2F3633] text-xs text-[#9A9E9B]">Anulează</button>`
+                : `<button type="button" data-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#2F3633] hover:border-[#5B2323] text-xs text-[#9A9E9B] hover:text-[#E57373] transition-colors">Șterge</button>`}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function syncAdminUI() {
+      const loggedIn = isAdminAuthenticated();
+      const panel = document.getElementById('admin-panel');
+      const dot = document.getElementById('nav-admin-dot');
+      const label = document.getElementById('nav-admin-label');
+      const statusBadge = document.getElementById('firebase-status-badge');
+      const setupNotice = document.getElementById('firebase-setup-notice');
+
+      if (statusBadge) {
+        statusBadge.innerHTML = useCloudBackend
+          ? '<span class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span> Conectat la Firebase Cloud'
+          : '<span class="w-1.5 h-1.5 rounded-full bg-[#D9A74A]"></span> Mod Local (neconectat la Firebase)';
+      }
+
+      if (setupNotice) {
+        if (useCloudBackend) setupNotice.classList.add('hidden');
+        else setupNotice.classList.remove('hidden');
+      }
+
+      if (loggedIn) {
+        panel.classList.remove('hidden');
+        dot.classList.remove('bg-[#6E7370]');
+        dot.classList.add('bg-[#2E9E6B]');
+        label.textContent = 'Panou Admin';
+      } else {
+        panel.classList.add('hidden');
+        dot.classList.remove('bg-[#2E9E6B]');
+        dot.classList.add('bg-[#6E7370]');
+        label.textContent = 'Admin';
+      }
+    }
+
+    /* =========================================================================
+       5. OPERAȚII CRUD FIRESTORE / LOCAL
+       ========================================================================= */
+    async function createTournament(data) {
+      if (useCloudBackend) {
+        await addDoc(collection(firebaseDb, 'tournaments'), {
+          ...data,
+          createdAt: serverTimestamp()
+        });
+      } else {
+        const list = loadLocalTournaments();
+        list.push({ id: 'frb-' + Date.now(), ...data });
+        saveLocalTournaments(list);
+        tournamentsState = list;
+        renderTournaments();
+      }
+    }
+
+    async function editTournament(id, data) {
+      if (useCloudBackend) {
+        await updateDoc(doc(firebaseDb, 'tournaments', id), data);
+      } else {
+        const list = loadLocalTournaments().map((item) =>
+          item.id === id ? { id: item.id, ...data } : item
+        );
+        saveLocalTournaments(list);
+        tournamentsState = list;
+        renderTournaments();
+      }
+    }
+
+    async function removeTournament(id) {
+      if (useCloudBackend) {
+        await deleteDoc(doc(firebaseDb, 'tournaments', id));
+      } else {
+        const list = loadLocalTournaments().filter((item) => item.id !== id);
+        saveLocalTournaments(list);
+        tournamentsState = list;
+        renderTournaments();
+      }
+    }
+
+    /* =========================================================================
+       6. INIȚIALIZARE EVENIMENTE & ASCULTĂTORI FIREBASE
+       ========================================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      const yearEl = document.getElementById('current-year');
+      if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+      // Adaptare etichetă login în funcție de modul Firebase vs Local
+      const userLabel = document.getElementById('login-user-label');
+      const userInput = document.getElementById('login-identifier');
+      if (!useCloudBackend && userLabel && userInput) {
+        userLabel.textContent = 'Utilizator';
+        userInput.type = 'text';
+        userInput.value = 'Admin';
+        userInput.placeholder = 'Admin';
+      } else if (userInput) {
+        userInput.type = 'email';
+      }
+
+      // Meniu mobil
+      const mobileToggle = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const iconOpen = document.getElementById('icon-menu-open');
+      const iconClose = document.getElementById('icon-menu-close');
+
+      function setMobileMenuOpen(open) {
+        mobileMenu.classList.toggle('hidden', !open);
+        iconOpen.classList.toggle('hidden', open);
+        iconClose.classList.toggle('hidden', !open);
+        mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
+      mobileToggle.addEventListener('click', () => {
+        setMobileMenuOpen(mobileMenu.classList.contains('hidden'));
+      });
+      document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+        link.addEventListener('click', () => setMobileMenuOpen(false));
+      });
+
+      // Filtre concursuri
+      document.querySelectorAll('.filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeFilter = btn.getAttribute('data-filter') || 'Toate';
+          document.querySelectorAll('.filter-btn').forEach((b) => {
+            b.className = b === btn
+              ? 'filter-btn px-3.5 py-2 rounded-[2px] text-xs font-medium uppercase tracking-[0.12em] bg-[#164D36] text-[#F0F0E9] border border-[#164D36] transition-colors'
+              : 'filter-btn px-3.5 py-2 rounded-[2px] text-xs font-medium uppercase tracking-[0.12em] bg-[#191D1B] text-[#9A9E9B] border border-[#2F3633] hover:text-[#F0F0E9] transition-colors';
+          });
+          renderTournaments();
+        });
+      });
+
+      // Modal Autentificare
+      const loginModal = document.getElementById('admin-login-modal');
+      const navAdminBtn = document.getElementById('nav-admin-btn');
+      const closeModalBtn = document.getElementById('close-login-modal-btn');
+      const loginForm = document.getElementById('admin-login-form');
+      const loginError = document.getElementById('login-error-msg');
+      const loginSubmitBtn = document.getElementById('login-submit-btn');
+
+      function openLoginModal() {
+        loginError.classList.add('hidden');
+        loginModal.classList.remove('hidden');
+        const passInput = document.getElementById('login-password');
+        if (passInput) {
+          passInput.value = '';
+          setTimeout(() => (useCloudBackend ? userInput.focus() : passInput.focus()), 50);
         }
       }
 
-      /* 8. Inițializare Evenimente DOM */
-      document.addEventListener('DOMContentLoaded', function () {
-        var yearEl = document.getElementById('current-year');
-        if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+      function closeLoginModal() {
+        loginModal.classList.add('hidden');
+      }
 
-        // Meniu mobil
-        var mobileToggle = document.getElementById('mobile-menu-toggle');
-        var mobileMenu = document.getElementById('mobile-menu');
-        var iconOpen = document.getElementById('icon-menu-open');
-        var iconClose = document.getElementById('icon-menu-close');
-
-        function setMobileMenuOpen(open) {
-          if (open) {
-            mobileMenu.classList.remove('hidden');
-            iconOpen.classList.add('hidden');
-            iconClose.classList.remove('hidden');
-            mobileToggle.setAttribute('aria-expanded', 'true');
-          } else {
-            mobileMenu.classList.add('hidden');
-            iconOpen.classList.remove('hidden');
-            iconClose.classList.add('hidden');
-            mobileToggle.setAttribute('aria-expanded', 'false');
-          }
+      navAdminBtn.addEventListener('click', () => {
+        if (isAdminAuthenticated()) {
+          document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          openLoginModal();
         }
+      });
 
-        mobileToggle.addEventListener('click', function () {
-          var isHidden = mobileMenu.classList.contains('hidden');
-          setMobileMenuOpen(isHidden);
-        });
+      closeModalBtn.addEventListener('click', closeLoginModal);
+      loginModal.addEventListener('click', (e) => {
+        if (e.target === loginModal) closeLoginModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !loginModal.classList.contains('hidden')) closeLoginModal();
+      });
 
-        document.querySelectorAll('.mobile-nav-link').forEach(function (link) {
-          link.addEventListener('click', function () {
-            setMobileMenuOpen(false);
-          });
-        });
+      // Submit Login (Firebase Auth sau Local)
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.classList.add('hidden');
+        const identifierVal = userInput.value.trim();
+        const passVal = document.getElementById('login-password').value;
 
-        // Filtre concursuri
-        document.querySelectorAll('.filter-btn').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            activeFilter = btn.getAttribute('data-filter') || 'Toate';
-            document.querySelectorAll('.filter-btn').forEach(function (b) {
-              if (b === btn) {
-                b.className = 'filter-btn px-3.5 py-2 rounded-[2px] text-xs font-medium uppercase tracking-[0.12em] bg-[#164D36] text-[#F0F0E9] border border-[#164D36] transition-colors';
-              } else {
-                b.className = 'filter-btn px-3.5 py-2 rounded-[2px] text-xs font-medium uppercase tracking-[0.12em] bg-[#191D1B] text-[#9A9E9B] border border-[#2F3633] hover:text-[#F0F0E9] transition-colors';
-              }
-            });
-            renderTournaments();
-          });
-        });
-
-        // Modal Admin Login
-        var loginModal = document.getElementById('admin-login-modal');
-        var navAdminBtn = document.getElementById('nav-admin-btn');
-        var closeModalBtn = document.getElementById('close-login-modal-btn');
-        var loginForm = document.getElementById('admin-login-form');
-        var loginError = document.getElementById('login-error-msg');
-
-        function openLoginModal() {
-          loginError.classList.add('hidden');
-          loginModal.classList.remove('hidden');
-          var passInput = document.getElementById('login-password');
-          if (passInput) {
-            passInput.value = '';
-            setTimeout(function () { passInput.focus(); }, 50);
-          }
-        }
-
-        function closeLoginModal() {
-          loginModal.classList.add('hidden');
-        }
-
-        navAdminBtn.addEventListener('click', function () {
-          if (isAdminLoggedIn()) {
-            var panel = document.getElementById('admin-panel');
-            if (panel) panel.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            openLoginModal();
-          }
-        });
-
-        closeModalBtn.addEventListener('click', closeLoginModal);
-        loginModal.addEventListener('click', function (e) {
-          if (e.target === loginModal) closeLoginModal();
-        });
-        document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape' && !loginModal.classList.contains('hidden')) {
+        if (useCloudBackend) {
+          loginSubmitBtn.disabled = true;
+          loginSubmitBtn.textContent = 'Se verifică...';
+          try {
+            await signInWithEmailAndPassword(firebaseAuth, identifierVal, passVal);
             closeLoginModal();
+            setTimeout(() => {
+              document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          } catch (err) {
+            loginError.textContent = translateFirebaseAuthError(err.code);
+            loginError.classList.remove('hidden');
+          } finally {
+            loginSubmitBtn.disabled = false;
+            loginSubmitBtn.textContent = 'Intră în panou';
           }
-        });
+        } else {
+          let cfg = INITIAL_LOCAL_ADMIN;
+          try {
+            const raw = localStorage.getItem(STORAGE_KEYS.ADMIN_CONFIG);
+            if (raw) cfg = JSON.parse(raw) || INITIAL_LOCAL_ADMIN;
+          } catch (err) {}
 
-        loginForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-          var userVal = document.getElementById('login-username').value.trim();
-          var passVal = document.getElementById('login-password').value;
-          var cfg = loadAdminConfig();
-          var computedHash = sha256Hex((cfg.salt || '') + passVal);
-
-          if (userVal.toLowerCase() === cfg.username.toLowerCase() && computedHash === cfg.passwordHash) {
-            safeStorage.setItem(STORAGE_KEYS.ADMIN_SESSION, 'authenticated');
+          const computedHash = sha256Hex((cfg.salt || '') + passVal);
+          if (identifierVal.toLowerCase() === cfg.username.toLowerCase() && computedHash === cfg.passwordHash) {
+            localStorage.setItem(STORAGE_KEYS.ADMIN_SESSION, 'authenticated');
             closeLoginModal();
             syncAdminUI();
-            var panel = document.getElementById('admin-panel');
-            if (panel) panel.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
           } else {
             loginError.textContent = 'Utilizator sau parolă incorectă.';
             loginError.classList.remove('hidden');
           }
-        });
+        }
+      });
 
-        // Deconectare Admin
-        document.getElementById('admin-logout-btn').addEventListener('click', function () {
-          safeStorage.removeItem(STORAGE_KEYS.ADMIN_SESSION);
+      // Deconectare
+      document.getElementById('admin-logout-btn').addEventListener('click', async () => {
+        if (useCloudBackend) {
+          await signOut(firebaseAuth);
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.ADMIN_SESSION);
+          syncAdminUI();
+        }
+      });
+
+      // Formular Concursuri
+      const tournamentForm = document.getElementById('tournament-form');
+      const editingIdInput = document.getElementById('editing-event-id');
+      const formPanelTitle = document.getElementById('form-panel-title');
+      const submitTournamentBtn = document.getElementById('submit-tournament-btn');
+      const cancelEditBtn = document.getElementById('cancel-edit-btn');
+      const formFeedbackMsg = document.getElementById('form-feedback-msg');
+
+      function showFormFeedback(msg, isError = false) {
+        formFeedbackMsg.textContent = msg;
+        formFeedbackMsg.className = isError
+          ? 'text-xs text-[#E57373]'
+          : 'text-xs text-[#2E9E6B]';
+        formFeedbackMsg.classList.remove('hidden');
+        setTimeout(() => formFeedbackMsg.classList.add('hidden'), 3500);
+      }
+
+      function resetTournamentForm() {
+        editingIdInput.value = '';
+        tournamentForm.reset();
+        document.getElementById('event-type').value = 'Bila 9';
+        document.getElementById('event-time').value = '18:00';
+        formPanelTitle.textContent = 'Adaugă un concurs nou';
+        submitTournamentBtn.textContent = 'Publică concursul';
+        cancelEditBtn.classList.add('hidden');
+      }
+
+      cancelEditBtn.addEventListener('click', resetTournamentForm);
+
+      tournamentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isAdminAuthenticated()) return;
+
+        const payload = {
+          title: document.getElementById('event-title').value.trim(),
+          gameType: document.getElementById('event-type').value,
+          date: document.getElementById('event-date').value,
+          time: document.getElementById('event-time').value,
+          externalLink: document.getElementById('event-link').value.trim(),
+          description: document.getElementById('event-description').value.trim()
+        };
+
+        if (!payload.title || !payload.date || !payload.time) return;
+
+        const editId = editingIdInput.value;
+        submitTournamentBtn.disabled = true;
+        submitTournamentBtn.textContent = 'Se salvează...';
+
+        try {
+          if (editId) {
+            await editTournament(editId, payload);
+            showFormFeedback('Concursul a fost actualizat.');
+          } else {
+            await createTournament(payload);
+            showFormFeedback('Concursul a fost publicat.');
+          }
+          resetTournamentForm();
+        } catch (err) {
+          console.error(err);
+          showFormFeedback('Eroare la salvare. Verifică regulile Firestore.', true);
+        } finally {
+          submitTournamentBtn.disabled = false;
+          submitTournamentBtn.textContent = editingIdInput.value ? 'Salvează modificările' : 'Publică concursul';
+        }
+      });
+
+      // Buton populare exemple demonstrative
+      document.getElementById('seed-demo-btn')?.addEventListener('click', async () => {
+        if (!isAdminAuthenticated()) return;
+        for (const item of DEFAULT_TOURNAMENTS) {
+          const { id, ...rest } = item;
+          await createTournament(rest);
+        }
+      });
+
+      // Editare / Ștergere din lista Admin
+      document.getElementById('admin-tournaments-list').addEventListener('click', async (e) => {
+        if (!isAdminAuthenticated()) return;
+        const target = e.target;
+
+        const editId = target.getAttribute('data-edit-id');
+        if (editId) {
+          const item = tournamentsState.find((ev) => ev.id === editId);
+          if (item) {
+            editingIdInput.value = item.id;
+            document.getElementById('event-title').value = item.title;
+            document.getElementById('event-type').value = item.gameType;
+            document.getElementById('event-date').value = item.date;
+            document.getElementById('event-time').value = item.time;
+            document.getElementById('event-link').value = item.externalLink || '';
+            document.getElementById('event-description').value = item.description || '';
+            formPanelTitle.textContent = 'Editează concursul';
+            submitTournamentBtn.textContent = 'Salvează modificările';
+            cancelEditBtn.classList.remove('hidden');
+            tournamentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        const deleteId = target.getAttribute('data-delete-id');
+        if (deleteId) {
+          pendingDeleteId = deleteId;
+          renderTournaments();
+          return;
+        }
+
+        if (target.getAttribute('data-cancel-delete')) {
+          pendingDeleteId = null;
+          renderTournaments();
+          return;
+        }
+
+        const confirmDeleteId = target.getAttribute('data-confirm-delete-id');
+        if (confirmDeleteId) {
+          pendingDeleteId = null;
+          try {
+            await removeTournament(confirmDeleteId);
+            if (editingIdInput.value === confirmDeleteId) resetTournamentForm();
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      });
+
+      // Schimbare parolă Administrator
+      document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isAdminAuthenticated()) return;
+        const newPassInput = document.getElementById('new-admin-password');
+        const msgEl = document.getElementById('password-change-msg');
+        const newPass = newPassInput.value;
+
+        if (!newPass || newPass.length < 6) {
+          msgEl.textContent = 'Minim 6 caractere.';
+          return;
+        }
+
+        if (useCloudBackend && firebaseAuth.currentUser) {
+          try {
+            await updatePassword(firebaseAuth.currentUser, newPass);
+            newPassInput.value = '';
+            msgEl.textContent = 'Parola Firebase a fost actualizată.';
+          } catch (err) {
+            msgEl.textContent = translateFirebaseAuthError(err.code);
+          }
+        } else {
+          const salt = Date.now().toString(16);
+          const updatedCfg = {
+            username: 'Admin',
+            salt,
+            passwordHash: sha256Hex(salt + newPass)
+          };
+          localStorage.setItem(STORAGE_KEYS.ADMIN_CONFIG, JSON.stringify(updatedCfg));
+          newPassInput.value = '';
+          msgEl.textContent = 'Parola locală a fost actualizată.';
+        }
+        setTimeout(() => { msgEl.textContent = ''; }, 4000);
+      });
+
+      // Conectare la Firebase Auth & Cloud Firestore (sau fallback local)
+      if (useCloudBackend) {
+        onAuthStateChanged(firebaseAuth, (user) => {
+          currentAdminUser = user;
           syncAdminUI();
         });
 
-        // Formular Adăugare / Editare Concurs
-        var tournamentForm = document.getElementById('tournament-form');
-        var editingIdInput = document.getElementById('editing-event-id');
-        var formPanelTitle = document.getElementById('form-panel-title');
-        var submitTournamentBtn = document.getElementById('submit-tournament-btn');
-        var cancelEditBtn = document.getElementById('cancel-edit-btn');
-
-        function resetTournamentForm() {
-          editingIdInput.value = '';
-          tournamentForm.reset();
-          document.getElementById('event-type').value = 'Bila 9';
-          document.getElementById('event-time').value = '18:00';
-          formPanelTitle.textContent = 'Adaugă un concurs nou';
-          submitTournamentBtn.textContent = 'Publică concursul';
-          cancelEditBtn.classList.add('hidden');
-        }
-
-        cancelEditBtn.addEventListener('click', resetTournamentForm);
-
-        tournamentForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-          if (!isAdminLoggedIn()) return;
-
-          var title = document.getElementById('event-title').value.trim();
-          var gameType = document.getElementById('event-type').value;
-          var date = document.getElementById('event-date').value;
-          var time = document.getElementById('event-time').value;
-          var externalLink = document.getElementById('event-link').value.trim();
-          var description = document.getElementById('event-description').value.trim();
-
-          if (!title || !date || !time) return;
-
-          var list = loadTournaments();
-          var editId = editingIdInput.value;
-
-          if (editId) {
-            list = list.map(function (item) {
-              if (item.id === editId) {
-                return {
-                  id: item.id,
-                  title: title,
-                  gameType: gameType,
-                  date: date,
-                  time: time,
-                  externalLink: externalLink,
-                  description: description
-                };
-              }
-              return item;
-            });
-          } else {
-            list.push({
-              id: 'frb-' + Date.now(),
-              title: title,
-              gameType: gameType,
-              date: date,
-              time: time,
-              externalLink: externalLink,
-              description: description
-            });
-          }
-
-          saveTournaments(list);
-          resetTournamentForm();
-          renderTournaments();
-        });
-
-        // Acțiuni Editare / Ștergere din lista Admin
-        document.getElementById('admin-tournaments-list').addEventListener('click', function (e) {
-          if (!isAdminLoggedIn()) return;
-          var target = e.target;
-
-          var editId = target.getAttribute('data-edit-id');
-          if (editId) {
-            var item = loadTournaments().find(function (ev) { return ev.id === editId; });
-            if (item) {
-              editingIdInput.value = item.id;
-              document.getElementById('event-title').value = item.title;
-              document.getElementById('event-type').value = item.gameType;
-              document.getElementById('event-date').value = item.date;
-              document.getElementById('event-time').value = item.time;
-              document.getElementById('event-link').value = item.externalLink || '';
-              document.getElementById('event-description').value = item.description || '';
-              formPanelTitle.textContent = 'Editează concursul';
-              submitTournamentBtn.textContent = 'Salvează modificările';
-              cancelEditBtn.classList.remove('hidden');
-              tournamentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            return;
-          }
-
-          var deleteId = target.getAttribute('data-delete-id');
-          if (deleteId) {
-            pendingDeleteId = deleteId;
+        onSnapshot(
+          collection(firebaseDb, 'tournaments'),
+          (snapshot) => {
+            tournamentsState = snapshot.docs.map((d) => ({
+              id: d.id,
+              ...d.data()
+            }));
             renderTournaments();
-            return;
+          },
+          (error) => {
+            console.error('Eroare citire Firestore:', error);
+            document.getElementById('tournaments-loading')?.classList.add('hidden');
+            document.getElementById('tournaments-empty')?.classList.remove('hidden');
           }
-
-          if (target.getAttribute('data-cancel-delete')) {
-            pendingDeleteId = null;
-            renderTournaments();
-            return;
-          }
-
-          var confirmDeleteId = target.getAttribute('data-confirm-delete-id');
-          if (confirmDeleteId) {
-            var updated = loadTournaments().filter(function (ev) { return ev.id !== confirmDeleteId; });
-            pendingDeleteId = null;
-            saveTournaments(updated);
-            if (editingIdInput.value === confirmDeleteId) resetTournamentForm();
-            renderTournaments();
-          }
-        });
-
-        // Schimbare parolă Admin
-        document.getElementById('change-password-form').addEventListener('submit', function (e) {
-          e.preventDefault();
-          if (!isAdminLoggedIn()) return;
-          var newPassInput = document.getElementById('new-admin-password');
-          var msgEl = document.getElementById('password-change-msg');
-          var newPass = newPassInput.value;
-
-          if (!newPass || newPass.length < 6) {
-            msgEl.textContent = 'Minim 6 caractere.';
-            return;
-          }
-
-          var cfg = loadAdminConfig();
-          var newSalt = generateSafeSalt();
-          var updatedCfg = {
-            username: cfg.username || 'Admin',
-            salt: newSalt,
-            passwordHash: sha256Hex(newSalt + newPass)
-          };
-          safeStorage.setItem(STORAGE_KEYS.ADMIN_CONFIG, JSON.stringify(updatedCfg));
-          newPassInput.value = '';
-          msgEl.textContent = 'Parola a fost actualizată.';
-          setTimeout(function () { msgEl.textContent = ''; }, 4000);
-        });
-
-        // Animații la derulare (cu fallback sigur)
-        var revealEls = document.querySelectorAll('.reveal');
-        if ('IntersectionObserver' in window) {
-          var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-              }
-            });
-          }, { threshold: 0.08 });
-
-          revealEls.forEach(function (el) { observer.observe(el); });
-        } else {
-          revealEls.forEach(function (el) { el.classList.add('is-visible'); });
-        }
-
-        // Randare inițială
+        );
+      } else {
+        tournamentsState = loadLocalTournaments();
         syncAdminUI();
         renderTournaments();
-      });
-    })();
+      }
+
+      // Animații la derulare
+      const revealEls = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        revealEls.forEach((el) => observer.observe(el));
+      } else {
+        revealEls.forEach((el) => el.classList.add('is-visible'));
+      }
+    });
   </script>
 </body>
 </html>
