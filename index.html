@@ -389,7 +389,7 @@
           </div>
         </div>
 
-        <!-- Indicator încărcare Firestore -->
+        <!-- Indicator încărcare Realtime Database -->
         <div id="tournaments-loading" class="mt-8 p-8 rounded-[2px] bg-[#191D1B] border border-[#2F3633] text-center">
           <p class="text-sm text-[#9A9E9B]">Se încarcă calendarul concursurilor...</p>
         </div>
@@ -406,7 +406,7 @@
       </div>
     </section>
 
-    <!-- ==================== PANOU ADMINISTRARE (FIREBASE / LOCAL) ==================== -->
+    <!-- ==================== PANOU ADMINISTRARE (REALTIME DATABASE) ==================== -->
     <section id="admin-panel" class="hidden py-16 sm:py-20 border-b border-[#2F3633] bg-[#141716]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#2F3633]">
@@ -417,7 +417,7 @@
               </span>
               <span id="firebase-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[2px] text-[11px] font-medium bg-[#191D1B] border border-[#2F3633] text-[#9A9E9B]">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span>
-                Firebase Cloud
+                Conectat la Firebase Realtime Database
               </span>
             </div>
             <h2 class="font-display text-2xl sm:text-3xl font-bold text-[#F0F0E9]">
@@ -432,11 +432,6 @@
           >
             Deconectare
           </button>
-        </div>
-
-        <!-- Notificare dacă firebaseConfig nu a fost încă completat -->
-        <div id="firebase-setup-notice" class="hidden mt-6 p-4 rounded-[2px] bg-[#191D1B] border border-[#8A6D2F] text-xs sm:text-sm text-[#E6D5A7]">
-          <strong>Atenție:</strong> Cheile din <code class="px-1.5 py-0.5 bg-[#101211] rounded">firebaseConfig</code> nu sunt completate încă. Datele se salvează momentan doar local în acest browser. Completează <code class="px-1.5 py-0.5 bg-[#101211] rounded">firebaseConfig</code> în cod pentru sincronizare live pe toate dispozitivele.
         </div>
 
         <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -705,12 +700,12 @@
 
       <form id="admin-login-form" class="mt-6 space-y-4">
         <div>
-          <label id="login-user-label" for="login-identifier" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+          <label for="login-identifier" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
             Email Administrator
           </label>
           <input
             id="login-identifier"
-            type="text"
+            type="email"
             required
             placeholder="admin@friendsroom.ro"
             autocomplete="username"
@@ -745,7 +740,7 @@
     </div>
   </div>
 
-  <!-- ==================== INTEGRARE FIREBASE + LOGICĂ APLICAȚIE ==================== -->
+  <!-- ==================== INTEGRARE FIREBASE REALTIME DATABASE + LOGICĂ ==================== -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
     import {
@@ -756,70 +751,32 @@
       updatePassword
     } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
     import {
-      getFirestore,
-      collection,
-      addDoc,
-      updateDoc,
-      deleteDoc,
-      doc,
-      onSnapshot,
+      getDatabase,
+      ref,
+      onValue,
+      push,
+      update,
+      remove,
       serverTimestamp
-    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js';
 
-    /* =========================================================================
-       1. CONFIGURAȚIE FIREBASE (ÎNLOCUIEȘTE CU DATELE DIN FIREBASE CONSOLE)
-       Firebase Console -> Project Settings -> Your apps -> Web app -> firebaseConfig
-       ========================================================================= */
     const firebaseConfig = {
-      apiKey: "PUNE_AICI_API_KEY",
-      authDomain: "PUNE_AICI_PROJECT_ID.firebaseapp.com",
-      projectId: "PUNE_AICI_PROJECT_ID",
-      storageBucket: "PUNE_AICI_PROJECT_ID.firebasestorage.app",
-      messagingSenderId: "PUNE_AICI_SENDER_ID",
-      appId: "PUNE_AICI_APP_ID"
+      apiKey: "AIzaSyC32lUY_5-NstApzP792czfGgiUlRXp77A",
+      authDomain: "friends-room-billiards.firebaseapp.com",
+      databaseURL: "https://friends-room-billiards-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "friends-room-billiards",
+      storageBucket: "friends-room-billiards.firebasestorage.app",
+      messagingSenderId: "882525586740",
+      appId: "1:882525586740:web:231091eabe127ff7521161",
+      measurementId: "G-30PTDJ5V40"
     };
 
-    const isFirebaseConfigured = Boolean(
-      firebaseConfig.apiKey &&
-      !firebaseConfig.apiKey.startsWith('PUNE_AICI') &&
-      firebaseConfig.projectId &&
-      !firebaseConfig.projectId.startsWith('PUNE_AICI')
-    );
-
-    let firebaseApp = null;
-    let firebaseAuth = null;
-    let firebaseDb = null;
-
-    if (isFirebaseConfigured) {
-      try {
-        firebaseApp = initializeApp(firebaseConfig);
-        firebaseAuth = getAuth(firebaseApp);
-        firebaseDb = getFirestore(firebaseApp);
-      } catch (err) {
-        console.error('Eroare la inițializarea Firebase:', err);
-      }
-    }
-
-    const useCloudBackend = Boolean(firebaseAuth && firebaseDb);
-
-    /* =========================================================================
-       2. STOCARE LOCALĂ DE REZERVĂ (CÂND FIREBASE NU ESTE ÎNCĂ CONFIGURAT)
-       ========================================================================= */
-    const STORAGE_KEYS = {
-      ADMIN_CONFIG: 'frb_admin_config_v1',
-      ADMIN_SESSION: 'frb_admin_session_v1',
-      TOURNAMENTS: 'frb_tournaments_v1'
-    };
-
-    const INITIAL_LOCAL_ADMIN = {
-      username: 'Admin',
-      passwordHash: '2da67f9647e3fc43527bcdfcd438024ef22e68f5e1e6cfafac9c6cab84ce28df',
-      salt: ''
-    };
+    const firebaseApp = initializeApp(firebaseConfig);
+    const firebaseAuth = getAuth(firebaseApp);
+    const firebaseRtdb = getDatabase(firebaseApp);
 
     const DEFAULT_TOURNAMENTS = [
       {
-        id: 'frb-demo-1',
         title: 'Open Friends Room — Bila 9',
         gameType: 'Bila 9',
         date: '2026-11-28',
@@ -828,7 +785,6 @@
         externalLink: ''
       },
       {
-        id: 'frb-demo-2',
         title: 'Seara Campionilor — Bila 8',
         gameType: 'Bila 8',
         date: '2026-12-05',
@@ -837,7 +793,6 @@
         externalLink: ''
       },
       {
-        id: 'frb-demo-3',
         title: 'Challenge de Iarnă — Bila 10',
         gameType: 'Bila 10',
         date: '2026-12-12',
@@ -847,98 +802,6 @@
       }
     ];
 
-    function sha256Hex(ascii) {
-      const str = unescape(encodeURIComponent(String(ascii == null ? '' : ascii)));
-      const words = [];
-      const asciiBitLength = str.length * 8;
-      const hash = [
-        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-        0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
-      ];
-      const k = [
-        0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
-        0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
-        0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
-        0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
-        0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
-        0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
-        0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
-        0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
-      ];
-      const rightRotate = (value, amount) => (value >>> amount) | (value << (32 - amount));
-
-      for (let i = 0; i < str.length; i++) {
-        words[i >> 2] |= str.charCodeAt(i) << (((3 - i) % 4) * 8);
-      }
-      words[asciiBitLength >> 5] |= 0x80 << (24 - (asciiBitLength % 32));
-      words[(((asciiBitLength + 64) >> 9) << 4) + 15] = asciiBitLength;
-
-      const w = new Array(64);
-      for (let idx = 0; idx < words.length; idx += 16) {
-        const oldHash = hash.slice(0);
-        for (let t = 0; t < 64; t++) {
-          if (t < 16) {
-            w[t] = words[idx + t] | 0;
-          } else {
-            const gamma0x = w[t - 15];
-            const gamma0 = rightRotate(gamma0x, 7) ^ rightRotate(gamma0x, 18) ^ (gamma0x >>> 3);
-            const gamma1x = w[t - 2];
-            const gamma1 = rightRotate(gamma1x, 17) ^ rightRotate(gamma1x, 19) ^ (gamma1x >>> 10);
-            w[t] = (w[t - 16] + gamma0 + w[t - 7] + gamma1) | 0;
-          }
-          const ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
-          const maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
-          const sigma0 = rightRotate(hash[0], 2) ^ rightRotate(hash[0], 13) ^ rightRotate(hash[0], 22);
-          const sigma1 = rightRotate(hash[4], 6) ^ rightRotate(hash[4], 11) ^ rightRotate(hash[4], 25);
-          const temp1 = (hash[7] + sigma1 + ch + k[t] + w[t]) | 0;
-          const temp2 = (sigma0 + maj) | 0;
-
-          hash[7] = hash[6];
-          hash[6] = hash[5];
-          hash[5] = hash[4];
-          hash[4] = (hash[3] + temp1) | 0;
-          hash[3] = hash[2];
-          hash[2] = hash[1];
-          hash[1] = hash[0];
-          hash[0] = (temp1 + temp2) | 0;
-        }
-        for (let h = 0; h < 8; h++) {
-          hash[h] = (hash[h] + oldHash[h]) | 0;
-        }
-      }
-
-      let result = '';
-      for (let m = 0; m < 8; m++) {
-        for (let n = 3; n + 1; n--) {
-          const b = (hash[m] >> (n * 8)) & 255;
-          result += (b < 16 ? '0' : '') + b.toString(16);
-        }
-      }
-      return result;
-    }
-
-    function loadLocalTournaments() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEYS.TOURNAMENTS);
-        if (!raw) {
-          localStorage.setItem(STORAGE_KEYS.TOURNAMENTS, JSON.stringify(DEFAULT_TOURNAMENTS));
-          return DEFAULT_TOURNAMENTS.slice();
-        }
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) return parsed;
-      } catch (e) {}
-      return DEFAULT_TOURNAMENTS.slice();
-    }
-
-    function saveLocalTournaments(list) {
-      try {
-        localStorage.setItem(STORAGE_KEYS.TOURNAMENTS, JSON.stringify(list));
-      } catch (e) {}
-    }
-
-    /* =========================================================================
-       3. UTILITARE FORMATARE ȘI UI
-       ========================================================================= */
     const RO_MONTHS_SHORT = ['ian.', 'feb.', 'mar.', 'apr.', 'mai', 'iun.', 'iul.', 'aug.', 'sept.', 'oct.', 'nov.', 'dec.'];
 
     function formatDateRo(dateStr) {
@@ -1013,7 +876,7 @@
         </span>`;
     }
 
-    function translateFirebaseAuthError(code) {
+    function translateFirebaseError(code) {
       switch (code) {
         case 'auth/invalid-email':
           return 'Adresa de email nu este validă.';
@@ -1027,26 +890,20 @@
           return 'Prea multe încercări. Așteaptă câteva minute.';
         case 'auth/requires-recent-login':
           return 'Deconectează-te și autentifică-te din nou înainte de a schimba parola.';
+        case 'PERMISSION_DENIED':
+          return 'Acces refuzat de regulile Realtime Database (verifică UID-ul în Rules).';
         default:
-          return 'Eroare la autentificare. Verifică datele introduse.';
+          return 'Eroare la conectare. Verifică datele sau regulile Firebase.';
       }
     }
 
-    /* =========================================================================
-       4. STARE APLICAȚIE ȘI RANDARE
-       ========================================================================= */
     let tournamentsState = [];
     let activeFilter = 'Toate';
     let pendingDeleteId = null;
     let currentAdminUser = null;
 
     function isAdminAuthenticated() {
-      if (useCloudBackend) return Boolean(currentAdminUser);
-      try {
-        return localStorage.getItem(STORAGE_KEYS.ADMIN_SESSION) === 'authenticated';
-      } catch (e) {
-        return false;
-      }
+      return Boolean(currentAdminUser);
     }
 
     function renderTournaments() {
@@ -1123,7 +980,7 @@
       }
 
       if (!sortedAll.length) {
-        listEl.innerHTML = '<p class="text-sm text-[#9A9E9B]">Nu există concursuri publicate momentan.</p>';
+        listEl.innerHTML = '<p class="text-sm text-[#9A9E9B]">Nu există concursuri publicate momentan. Poți adăuga unul din formular sau poți apăsa „+ Adaugă exemple”.</p>';
         return;
       }
 
@@ -1158,19 +1015,6 @@
       const panel = document.getElementById('admin-panel');
       const dot = document.getElementById('nav-admin-dot');
       const label = document.getElementById('nav-admin-label');
-      const statusBadge = document.getElementById('firebase-status-badge');
-      const setupNotice = document.getElementById('firebase-setup-notice');
-
-      if (statusBadge) {
-        statusBadge.innerHTML = useCloudBackend
-          ? '<span class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span> Conectat la Firebase Cloud'
-          : '<span class="w-1.5 h-1.5 rounded-full bg-[#D9A74A]"></span> Mod Local (neconectat la Firebase)';
-      }
-
-      if (setupNotice) {
-        if (useCloudBackend) setupNotice.classList.add('hidden');
-        else setupNotice.classList.remove('hidden');
-      }
 
       if (loggedIn) {
         panel.classList.remove('hidden');
@@ -1185,68 +1029,27 @@
       }
     }
 
-    /* =========================================================================
-       5. OPERAȚII CRUD FIRESTORE / LOCAL
-       ========================================================================= */
+    const tournamentsRef = ref(firebaseRtdb, 'tournaments');
+
     async function createTournament(data) {
-      if (useCloudBackend) {
-        await addDoc(collection(firebaseDb, 'tournaments'), {
-          ...data,
-          createdAt: serverTimestamp()
-        });
-      } else {
-        const list = loadLocalTournaments();
-        list.push({ id: 'frb-' + Date.now(), ...data });
-        saveLocalTournaments(list);
-        tournamentsState = list;
-        renderTournaments();
-      }
+      await push(tournamentsRef, {
+        ...data,
+        createdAt: serverTimestamp()
+      });
     }
 
     async function editTournament(id, data) {
-      if (useCloudBackend) {
-        await updateDoc(doc(firebaseDb, 'tournaments', id), data);
-      } else {
-        const list = loadLocalTournaments().map((item) =>
-          item.id === id ? { id: item.id, ...data } : item
-        );
-        saveLocalTournaments(list);
-        tournamentsState = list;
-        renderTournaments();
-      }
+      await update(ref(firebaseRtdb, `tournaments/${id}`), data);
     }
 
     async function removeTournament(id) {
-      if (useCloudBackend) {
-        await deleteDoc(doc(firebaseDb, 'tournaments', id));
-      } else {
-        const list = loadLocalTournaments().filter((item) => item.id !== id);
-        saveLocalTournaments(list);
-        tournamentsState = list;
-        renderTournaments();
-      }
+      await remove(ref(firebaseRtdb, `tournaments/${id}`));
     }
 
-    /* =========================================================================
-       6. INIȚIALIZARE EVENIMENTE & ASCULTĂTORI FIREBASE
-       ========================================================================= */
     document.addEventListener('DOMContentLoaded', () => {
       const yearEl = document.getElementById('current-year');
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-      // Adaptare etichetă login în funcție de modul Firebase vs Local
-      const userLabel = document.getElementById('login-user-label');
-      const userInput = document.getElementById('login-identifier');
-      if (!useCloudBackend && userLabel && userInput) {
-        userLabel.textContent = 'Utilizator';
-        userInput.type = 'text';
-        userInput.value = 'Admin';
-        userInput.placeholder = 'Admin';
-      } else if (userInput) {
-        userInput.type = 'email';
-      }
-
-      // Meniu mobil
       const mobileToggle = document.getElementById('mobile-menu-toggle');
       const mobileMenu = document.getElementById('mobile-menu');
       const iconOpen = document.getElementById('icon-menu-open');
@@ -1266,7 +1069,6 @@
         link.addEventListener('click', () => setMobileMenuOpen(false));
       });
 
-      // Filtre concursuri
       document.querySelectorAll('.filter-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
           activeFilter = btn.getAttribute('data-filter') || 'Toate';
@@ -1279,13 +1081,13 @@
         });
       });
 
-      // Modal Autentificare
       const loginModal = document.getElementById('admin-login-modal');
       const navAdminBtn = document.getElementById('nav-admin-btn');
       const closeModalBtn = document.getElementById('close-login-modal-btn');
       const loginForm = document.getElementById('admin-login-form');
       const loginError = document.getElementById('login-error-msg');
       const loginSubmitBtn = document.getElementById('login-submit-btn');
+      const userInput = document.getElementById('login-identifier');
 
       function openLoginModal() {
         loginError.classList.add('hidden');
@@ -1293,7 +1095,7 @@
         const passInput = document.getElementById('login-password');
         if (passInput) {
           passInput.value = '';
-          setTimeout(() => (useCloudBackend ? userInput.focus() : passInput.focus()), 50);
+          setTimeout(() => userInput.focus(), 50);
         }
       }
 
@@ -1317,60 +1119,33 @@
         if (e.key === 'Escape' && !loginModal.classList.contains('hidden')) closeLoginModal();
       });
 
-      // Submit Login (Firebase Auth sau Local)
       loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         loginError.classList.add('hidden');
-        const identifierVal = userInput.value.trim();
+        const emailVal = userInput.value.trim();
         const passVal = document.getElementById('login-password').value;
 
-        if (useCloudBackend) {
-          loginSubmitBtn.disabled = true;
-          loginSubmitBtn.textContent = 'Se verifică...';
-          try {
-            await signInWithEmailAndPassword(firebaseAuth, identifierVal, passVal);
-            closeLoginModal();
-            setTimeout(() => {
-              document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          } catch (err) {
-            loginError.textContent = translateFirebaseAuthError(err.code);
-            loginError.classList.remove('hidden');
-          } finally {
-            loginSubmitBtn.disabled = false;
-            loginSubmitBtn.textContent = 'Intră în panou';
-          }
-        } else {
-          let cfg = INITIAL_LOCAL_ADMIN;
-          try {
-            const raw = localStorage.getItem(STORAGE_KEYS.ADMIN_CONFIG);
-            if (raw) cfg = JSON.parse(raw) || INITIAL_LOCAL_ADMIN;
-          } catch (err) {}
-
-          const computedHash = sha256Hex((cfg.salt || '') + passVal);
-          if (identifierVal.toLowerCase() === cfg.username.toLowerCase() && computedHash === cfg.passwordHash) {
-            localStorage.setItem(STORAGE_KEYS.ADMIN_SESSION, 'authenticated');
-            closeLoginModal();
-            syncAdminUI();
+        loginSubmitBtn.disabled = true;
+        loginSubmitBtn.textContent = 'Se verifică...';
+        try {
+          await signInWithEmailAndPassword(firebaseAuth, emailVal, passVal);
+          closeLoginModal();
+          setTimeout(() => {
             document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            loginError.textContent = 'Utilizator sau parolă incorectă.';
-            loginError.classList.remove('hidden');
-          }
+          }, 100);
+        } catch (err) {
+          loginError.textContent = translateFirebaseError(err.code);
+          loginError.classList.remove('hidden');
+        } finally {
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = 'Intră în panou';
         }
       });
 
-      // Deconectare
       document.getElementById('admin-logout-btn').addEventListener('click', async () => {
-        if (useCloudBackend) {
-          await signOut(firebaseAuth);
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.ADMIN_SESSION);
-          syncAdminUI();
-        }
+        await signOut(firebaseAuth);
       });
 
-      // Formular Concursuri
       const tournamentForm = document.getElementById('tournament-form');
       const editingIdInput = document.getElementById('editing-event-id');
       const formPanelTitle = document.getElementById('form-panel-title');
@@ -1384,7 +1159,7 @@
           ? 'text-xs text-[#E57373]'
           : 'text-xs text-[#2E9E6B]';
         formFeedbackMsg.classList.remove('hidden');
-        setTimeout(() => formFeedbackMsg.classList.add('hidden'), 3500);
+        setTimeout(() => formFeedbackMsg.classList.add('hidden'), 4000);
       }
 
       function resetTournamentForm() {
@@ -1421,31 +1196,33 @@
         try {
           if (editId) {
             await editTournament(editId, payload);
-            showFormFeedback('Concursul a fost actualizat.');
+            showFormFeedback('Concursul a fost actualizat în Realtime Database.');
           } else {
             await createTournament(payload);
-            showFormFeedback('Concursul a fost publicat.');
+            showFormFeedback('Concursul a fost publicat live.');
           }
           resetTournamentForm();
         } catch (err) {
           console.error(err);
-          showFormFeedback('Eroare la salvare. Verifică regulile Firestore.', true);
+          showFormFeedback(translateFirebaseError(err.code), true);
         } finally {
           submitTournamentBtn.disabled = false;
           submitTournamentBtn.textContent = editingIdInput.value ? 'Salvează modificările' : 'Publică concursul';
         }
       });
 
-      // Buton populare exemple demonstrative
       document.getElementById('seed-demo-btn')?.addEventListener('click', async () => {
         if (!isAdminAuthenticated()) return;
-        for (const item of DEFAULT_TOURNAMENTS) {
-          const { id, ...rest } = item;
-          await createTournament(rest);
+        try {
+          for (const item of DEFAULT_TOURNAMENTS) {
+            await createTournament(item);
+          }
+          showFormFeedback('Concursurile demonstrative au fost adăugate.');
+        } catch (err) {
+          showFormFeedback(translateFirebaseError(err.code), true);
         }
       });
 
-      // Editare / Ștergere din lista Admin
       document.getElementById('admin-tournaments-list').addEventListener('click', async (e) => {
         if (!isAdminAuthenticated()) return;
         const target = e.target;
@@ -1489,15 +1266,14 @@
             await removeTournament(confirmDeleteId);
             if (editingIdInput.value === confirmDeleteId) resetTournamentForm();
           } catch (err) {
-            console.error(err);
+            showFormFeedback(translateFirebaseError(err.code), true);
           }
         }
       });
 
-      // Schimbare parolă Administrator
       document.getElementById('change-password-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!isAdminAuthenticated()) return;
+        if (!isAdminAuthenticated() || !firebaseAuth.currentUser) return;
         const newPassInput = document.getElementById('new-admin-password');
         const msgEl = document.getElementById('password-change-msg');
         const newPass = newPassInput.value;
@@ -1507,57 +1283,42 @@
           return;
         }
 
-        if (useCloudBackend && firebaseAuth.currentUser) {
-          try {
-            await updatePassword(firebaseAuth.currentUser, newPass);
-            newPassInput.value = '';
-            msgEl.textContent = 'Parola Firebase a fost actualizată.';
-          } catch (err) {
-            msgEl.textContent = translateFirebaseAuthError(err.code);
-          }
-        } else {
-          const salt = Date.now().toString(16);
-          const updatedCfg = {
-            username: 'Admin',
-            salt,
-            passwordHash: sha256Hex(salt + newPass)
-          };
-          localStorage.setItem(STORAGE_KEYS.ADMIN_CONFIG, JSON.stringify(updatedCfg));
+        try {
+          await updatePassword(firebaseAuth.currentUser, newPass);
           newPassInput.value = '';
-          msgEl.textContent = 'Parola locală a fost actualizată.';
+          msgEl.textContent = 'Parola Firebase a fost actualizată.';
+        } catch (err) {
+          msgEl.textContent = translateFirebaseError(err.code);
         }
         setTimeout(() => { msgEl.textContent = ''; }, 4000);
       });
 
-      // Conectare la Firebase Auth & Cloud Firestore (sau fallback local)
-      if (useCloudBackend) {
-        onAuthStateChanged(firebaseAuth, (user) => {
-          currentAdminUser = user;
-          syncAdminUI();
-        });
-
-        onSnapshot(
-          collection(firebaseDb, 'tournaments'),
-          (snapshot) => {
-            tournamentsState = snapshot.docs.map((d) => ({
-              id: d.id,
-              ...d.data()
-            }));
-            renderTournaments();
-          },
-          (error) => {
-            console.error('Eroare citire Firestore:', error);
-            document.getElementById('tournaments-loading')?.classList.add('hidden');
-            document.getElementById('tournaments-empty')?.classList.remove('hidden');
-          }
-        );
-      } else {
-        tournamentsState = loadLocalTournaments();
+      onAuthStateChanged(firebaseAuth, (user) => {
+        currentAdminUser = user;
         syncAdminUI();
-        renderTournaments();
-      }
+      });
 
-      // Animații la derulare
+      onValue(
+        tournamentsRef,
+        (snapshot) => {
+          const val = snapshot.val();
+          if (!val) {
+            tournamentsState = [];
+          } else {
+            tournamentsState = Object.keys(val).map((key) => ({
+              id: key,
+              ...val[key]
+            }));
+          }
+          renderTournaments();
+        },
+        (error) => {
+          console.error('Eroare citire Realtime Database:', error);
+          document.getElementById('tournaments-loading')?.classList.add('hidden');
+          document.getElementById('tournaments-empty')?.classList.remove('hidden');
+        }
+      );
+
       const revealEls = document.querySelectorAll('.reveal');
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
