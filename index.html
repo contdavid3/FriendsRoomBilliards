@@ -765,9 +765,13 @@
     </div>
   </div>
 
-  <!-- ==================== INTEGRARE FIREBASE REALTIME DATABASE + LOGICĂ ==================== -->
+  <!-- ==================== INTEGRARE FIREBASE APP CHECK + REALTIME DATABASE ==================== -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import {
+      initializeAppCheck,
+      ReCaptchaEnterpriseProvider
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js';
     import {
       getAuth,
       signInWithEmailAndPassword,
@@ -797,6 +801,12 @@
     };
 
     const firebaseApp = initializeApp(firebaseConfig);
+
+    initializeAppCheck(firebaseApp, {
+      provider: new ReCaptchaEnterpriseProvider('6LfXpy4uAAAAAHxxRWbTfNGQLa8w1ABJSmkzaHFf'),
+      isTokenAutoRefreshEnabled: true
+    });
+
     const firebaseAuth = getAuth(firebaseApp);
     const firebaseRtdb = getDatabase(firebaseApp);
 
@@ -915,6 +925,8 @@
           return 'Prea multe încercări. Așteaptă câteva minute.';
         case 'auth/requires-recent-login':
           return 'Deconectează-te și autentifică-te din nou înainte de a schimba parola.';
+        case 'auth/firebase-app-check-token-is-invalid':
+          return 'Verificarea de securitate App Check a eșuat. Reîncarcă pagina.';
         case 'PERMISSION_DENIED':
           return 'Acces refuzat de regulile Realtime Database (verifică UID-ul în Rules).';
         default:
@@ -1136,9 +1148,80 @@
       const loginSubmitBtn = document.getElementById('login-submit-btn');
       const userInput = document.getElementById('login-identifier');
 
+      /* Protecție anti brute-force pe formularul de login (blocaj progresiv după 3 greșeli) */
+      const LOCKOUT_STORAGE_KEY = 'fr_admin_login_guard';
+      let lockoutTimer = null;
+
+      function getLockoutState() {
+        try {
+          const raw = localStorage.getItem(LOCKOUT_STORAGE_KEY);
+          if (!raw) return { fails: 0, lockUntil: 0, penaltyStep: 0 };
+          const parsed = JSON.parse(raw);
+          return {
+            fails: Number(parsed.fails) || 0,
+            lockUntil: Number(parsed.lockUntil) || 0,
+            penaltyStep: Number(parsed.penaltyStep) || 0
+          };
+        } catch (e) {
+          return { fails: 0, lockUntil: 0, penaltyStep: 0 };
+        }
+      }
+
+      function saveLockoutState(state) {
+        try {
+          localStorage.setItem(LOCKOUT_STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+      }
+
+      function clearLockoutState() {
+        try {
+          localStorage.removeItem(LOCKOUT_STORAGE_KEY);
+        } catch (e) {}
+        if (lockoutTimer) {
+          clearInterval(lockoutTimer);
+          lockoutTimer = null;
+        }
+      }
+
+      function updateLockoutUI() {
+        const state = getLockoutState();
+        const now = Date.now();
+        if (state.lockUntil > now) {
+          const remainingSec = Math.ceil((state.lockUntil - now) / 1000);
+          loginSubmitBtn.disabled = true;
+          loginSubmitBtn.textContent = `Blocat (${remainingSec}s)`;
+          loginError.textContent = `Prea multe încercări greșite. Mai așteaptă ${remainingSec} secunde.`;
+          loginError.classList.remove('hidden');
+
+          if (!lockoutTimer) {
+            lockoutTimer = setInterval(() => {
+              const current = getLockoutState();
+              if (current.lockUntil <= Date.now()) {
+                clearInterval(lockoutTimer);
+                lockoutTimer = null;
+                loginSubmitBtn.disabled = false;
+                loginSubmitBtn.textContent = 'Intră în panou';
+                loginError.classList.add('hidden');
+              } else {
+                const sec = Math.ceil((current.lockUntil - Date.now()) / 1000);
+                loginSubmitBtn.textContent = `Blocat (${sec}s)`;
+                loginError.textContent = `Prea multe încercări greșite. Mai așteaptă ${sec} secunde.`;
+              }
+            }, 500);
+          }
+          return true;
+        }
+        return false;
+      }
+
       function openLoginModal() {
         loginError.classList.add('hidden');
         loginModal.classList.remove('hidden');
+        const isLocked = updateLockoutUI();
+        if (!isLocked) {
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = 'Intră în panou';
+        }
         const passInput = document.getElementById('login-password');
         if (passInput) {
           passInput.value = '';
@@ -1168,6 +1251,8 @@
 
       loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (updateLockoutUI()) return;
+
         loginError.classList.add('hidden');
         const emailVal = userInput.value.trim();
         const passVal = document.getElementById('login-password').value;
@@ -1176,16 +1261,35 @@
         loginSubmitBtn.textContent = 'Se verifică...';
         try {
           await signInWithEmailAndPassword(firebaseAuth, emailVal, passVal);
+          clearLockoutState();
           closeLoginModal();
           setTimeout(() => {
             document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
           }, 100);
         } catch (err) {
-          loginError.textContent = translateFirebaseError(err.code);
-          loginError.classList.remove('hidden');
-        } finally {
-          loginSubmitBtn.disabled = false;
-          loginSubmitBtn.textContent = 'Intră în panou';
+          const state = getLockoutState();
+          const nextFails = state.fails + 1;
+          if (nextFails >= 3) {
+            const nextStep = state.penaltyStep + 1;
+            const durationMs = 30000 * Math.pow(2, nextStep - 1);
+            saveLockoutState({
+              fails: 0,
+              lockUntil: Date.now() + durationMs,
+              penaltyStep: nextStep
+            });
+            updateLockoutUI();
+          } else {
+            saveLockoutState({
+              fails: nextFails,
+              lockUntil: 0,
+              penaltyStep: state.penaltyStep
+            });
+            const remainingTries = 3 - nextFails;
+            loginError.textContent = `${translateFirebaseError(err.code)} (Mai ai ${remainingTries} ${remainingTries === 1 ? 'încercare' : 'încercări'} înainte de blocare temporară.)`;
+            loginError.classList.remove('hidden');
+            loginSubmitBtn.disabled = false;
+            loginSubmitBtn.textContent = 'Intră în panou';
+          }
         }
       });
 
