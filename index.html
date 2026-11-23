@@ -158,14 +158,23 @@
         <a href="#contact" class="text-sm text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors">Contact</a>
       </nav>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3">
         <button
           id="nav-admin-btn"
           type="button"
-          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-xs font-medium uppercase tracking-[0.12em] text-[#F0F0E9] transition-colors"
+          class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-2 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-xs font-medium uppercase tracking-[0.12em] text-[#F0F0E9] transition-colors"
         >
           <span id="nav-admin-dot" class="w-1.5 h-1.5 rounded-full bg-[#6E7370]"></span>
           <span id="nav-admin-label">Admin</span>
+        </button>
+
+        <button
+          id="nav-logout-btn"
+          type="button"
+          title="Deconectare din panoul de administrare"
+          class="hidden inline-flex items-center gap-1.5 px-3 py-2 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-xs font-medium uppercase tracking-[0.12em] text-[#F2B8B5] hover:text-white transition-colors"
+        >
+          <span>Ieșire</span>
         </button>
 
         <button
@@ -453,7 +462,7 @@
           <button
             id="admin-logout-btn"
             type="button"
-            class="self-start sm:self-auto px-4 py-2.5 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#5B2323] hover:text-white text-xs font-medium uppercase tracking-[0.12em] text-[#9A9E9B] transition-colors"
+            class="self-start sm:self-auto px-4 py-2.5 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-xs font-medium uppercase tracking-[0.12em] text-[#F2B8B5] hover:text-white transition-colors"
           >
             Deconectare
           </button>
@@ -774,6 +783,8 @@
     } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js';
     import {
       getAuth,
+      setPersistence,
+      browserSessionPersistence,
       signInWithEmailAndPassword,
       signOut,
       onAuthStateChanged,
@@ -809,6 +820,11 @@
 
     const firebaseAuth = getAuth(firebaseApp);
     const firebaseRtdb = getDatabase(firebaseApp);
+
+    /* Deconectare automată la închiderea tab-ului / browserului */
+    setPersistence(firebaseAuth, browserSessionPersistence).catch((err) => {
+      console.error('Eroare configurare persistență sesiune:', err);
+    });
 
     const DEFAULT_TOURNAMENTS = [
       {
@@ -1072,20 +1088,29 @@
       const panel = document.getElementById('admin-panel');
       const dot = document.getElementById('nav-admin-dot');
       const label = document.getElementById('nav-admin-label');
+      const navLogoutBtn = document.getElementById('nav-logout-btn');
 
       if (loggedIn) {
         panel.classList.remove('hidden');
         dot.classList.remove('bg-[#6E7370]');
         dot.classList.add('bg-[#2E9E6B]');
         label.textContent = 'Panou Admin';
+        if (navLogoutBtn) navLogoutBtn.classList.remove('hidden');
       } else {
         panel.classList.add('hidden');
         dot.classList.remove('bg-[#2E9E6B]');
         dot.classList.add('bg-[#6E7370]');
         label.textContent = 'Admin';
+        if (navLogoutBtn) navLogoutBtn.classList.add('hidden');
       }
 
       renderTournaments();
+    }
+
+    async function performAdminLogout() {
+      pendingDeleteId = null;
+      await signOut(firebaseAuth);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     const tournamentsRef = ref(firebaseRtdb, 'tournaments');
@@ -1260,6 +1285,7 @@
         loginSubmitBtn.disabled = true;
         loginSubmitBtn.textContent = 'Se verifică...';
         try {
+          await setPersistence(firebaseAuth, browserSessionPersistence);
           await signInWithEmailAndPassword(firebaseAuth, emailVal, passVal);
           clearLockoutState();
           closeLoginModal();
@@ -1281,216 +1307,4 @@
           } else {
             saveLockoutState({
               fails: nextFails,
-              lockUntil: 0,
-              penaltyStep: state.penaltyStep
-            });
-            const remainingTries = 3 - nextFails;
-            loginError.textContent = `${translateFirebaseError(err.code)} (Mai ai ${remainingTries} ${remainingTries === 1 ? 'încercare' : 'încercări'} înainte de blocare temporară.)`;
-            loginError.classList.remove('hidden');
-            loginSubmitBtn.disabled = false;
-            loginSubmitBtn.textContent = 'Intră în panou';
-          }
-        }
-      });
-
-      document.getElementById('admin-logout-btn').addEventListener('click', async () => {
-        pendingDeleteId = null;
-        await signOut(firebaseAuth);
-      });
-
-      const tournamentForm = document.getElementById('tournament-form');
-      const editingIdInput = document.getElementById('editing-event-id');
-      const formPanelTitle = document.getElementById('form-panel-title');
-      const submitTournamentBtn = document.getElementById('submit-tournament-btn');
-      const cancelEditBtn = document.getElementById('cancel-edit-btn');
-      const formFeedbackMsg = document.getElementById('form-feedback-msg');
-
-      function showFormFeedback(msg, isError = false) {
-        formFeedbackMsg.textContent = msg;
-        formFeedbackMsg.className = isError
-          ? 'text-xs text-[#E57373]'
-          : 'text-xs text-[#2E9E6B]';
-        formFeedbackMsg.classList.remove('hidden');
-        setTimeout(() => formFeedbackMsg.classList.add('hidden'), 4000);
-      }
-
-      function resetTournamentForm() {
-        editingIdInput.value = '';
-        tournamentForm.reset();
-        document.getElementById('event-type').value = 'Bila 9';
-        document.getElementById('event-time').value = '18:00';
-        formPanelTitle.textContent = 'Adaugă un concurs nou';
-        submitTournamentBtn.textContent = 'Publică concursul';
-        cancelEditBtn.classList.add('hidden');
-      }
-
-      cancelEditBtn.addEventListener('click', resetTournamentForm);
-
-      tournamentForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!isAdminAuthenticated()) return;
-
-        const payload = {
-          title: document.getElementById('event-title').value.trim(),
-          gameType: document.getElementById('event-type').value,
-          date: document.getElementById('event-date').value,
-          time: document.getElementById('event-time').value,
-          externalLink: document.getElementById('event-link').value.trim(),
-          description: document.getElementById('event-description').value.trim()
-        };
-
-        if (!payload.title || !payload.date || !payload.time) return;
-
-        const editId = editingIdInput.value;
-        submitTournamentBtn.disabled = true;
-        submitTournamentBtn.textContent = 'Se salvează...';
-
-        try {
-          if (editId) {
-            await editTournament(editId, payload);
-            showFormFeedback('Concursul a fost actualizat în Realtime Database.');
-          } else {
-            await createTournament(payload);
-            showFormFeedback('Concursul a fost publicat live.');
-          }
-          resetTournamentForm();
-        } catch (err) {
-          console.error(err);
-          showFormFeedback(translateFirebaseError(err.code), true);
-        } finally {
-          submitTournamentBtn.disabled = false;
-          submitTournamentBtn.textContent = editingIdInput.value ? 'Salvează modificările' : 'Publică concursul';
-        }
-      });
-
-      document.getElementById('seed-demo-btn')?.addEventListener('click', async () => {
-        if (!isAdminAuthenticated()) return;
-        try {
-          for (const item of DEFAULT_TOURNAMENTS) {
-            await createTournament(item);
-          }
-          showFormFeedback('Concursurile demonstrative au fost adăugate.');
-        } catch (err) {
-          showFormFeedback(translateFirebaseError(err.code), true);
-        }
-      });
-
-      /* Handler comun pentru Editare / Ștergere atât din cardurile publice, cât și din Panoul Admin */
-      async function handleTournamentActionClick(e) {
-        if (!isAdminAuthenticated()) return;
-        const target = e.target.closest('button');
-        if (!target) return;
-
-        const editId = target.getAttribute('data-edit-id');
-        if (editId) {
-          const item = tournamentsState.find((ev) => ev.id === editId);
-          if (item) {
-            editingIdInput.value = item.id;
-            document.getElementById('event-title').value = item.title;
-            document.getElementById('event-type').value = item.gameType;
-            document.getElementById('event-date').value = item.date;
-            document.getElementById('event-time').value = item.time;
-            document.getElementById('event-link').value = item.externalLink || '';
-            document.getElementById('event-description').value = item.description || '';
-            formPanelTitle.textContent = 'Editează concursul';
-            submitTournamentBtn.textContent = 'Salvează modificările';
-            cancelEditBtn.classList.remove('hidden');
-            tournamentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          return;
-        }
-
-        const deleteId = target.getAttribute('data-delete-id');
-        if (deleteId) {
-          pendingDeleteId = deleteId;
-          renderTournaments();
-          return;
-        }
-
-        if (target.getAttribute('data-cancel-delete')) {
-          pendingDeleteId = null;
-          renderTournaments();
-          return;
-        }
-
-        const confirmDeleteId = target.getAttribute('data-confirm-delete-id');
-        if (confirmDeleteId) {
-          pendingDeleteId = null;
-          try {
-            await removeTournament(confirmDeleteId);
-            if (editingIdInput.value === confirmDeleteId) resetTournamentForm();
-          } catch (err) {
-            showFormFeedback(translateFirebaseError(err.code), true);
-          }
-        }
-      }
-
-      document.getElementById('tournaments-grid').addEventListener('click', handleTournamentActionClick);
-      document.getElementById('admin-tournaments-list').addEventListener('click', handleTournamentActionClick);
-
-      document.getElementById('change-password-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        if (!isAdminAuthenticated() || !firebaseAuth.currentUser) return;
-        const newPassInput = document.getElementById('new-admin-password');
-        const msgEl = document.getElementById('password-change-msg');
-        const newPass = newPassInput.value;
-
-        if (!newPass || newPass.length < 6) {
-          msgEl.textContent = 'Minim 6 caractere.';
-          return;
-        }
-
-        try {
-          await updatePassword(firebaseAuth.currentUser, newPass);
-          newPassInput.value = '';
-          msgEl.textContent = 'Parola Firebase a fost actualizată.';
-        } catch (err) {
-          msgEl.textContent = translateFirebaseError(err.code);
-        }
-        setTimeout(() => { msgEl.textContent = ''; }, 4000);
-      });
-
-      onAuthStateChanged(firebaseAuth, (user) => {
-        currentAdminUser = user;
-        syncAdminUI();
-      });
-
-      onValue(
-        tournamentsRef,
-        (snapshot) => {
-          const val = snapshot.val();
-          if (!val) {
-            tournamentsState = [];
-          } else {
-            tournamentsState = Object.keys(val).map((key) => ({
-              id: key,
-              ...val[key]
-            }));
-          }
-          renderTournaments();
-        },
-        (error) => {
-          console.error('Eroare citire Realtime Database:', error);
-          document.getElementById('tournaments-loading')?.classList.add('hidden');
-          document.getElementById('tournaments-empty')?.classList.remove('hidden');
-        }
-      );
-
-      const revealEls = document.querySelectorAll('.reveal');
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.08 });
-        revealEls.forEach((el) => observer.observe(el));
-      } else {
-        revealEls.forEach((el) => el.classList.add('is-visible'));
-      }
-    });
-  </script>
-</body>
-</html>
+              lock
