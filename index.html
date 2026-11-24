@@ -106,12 +106,17 @@
       background: #3F4844;
     }
 
+    /* Secțiunile sunt vizibile implicit (nu pot rămâne negre dacă întârzie un script) */
     .reveal {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .reveal.is-visible {
+    html.js-reveal-ready .reveal:not(.is-visible) {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    html.js-reveal-ready .reveal.is-visible {
       opacity: 1;
       transform: translateY(0);
     }
@@ -262,7 +267,7 @@
           </div>
         </div>
 
-        <div class="mt-14 pt-10 border-t border-[#2F3633] grid grid-cols-1 sm:grid-cols-3 gap-6 reveal">
+        <div class="mt-14 pt-10 border-t border-[#2F3633] grid grid-cols-1 sm:grid-cols-3 gap-6 reveal is-visible">
           <div class="p-5 rounded-[2px] bg-[#191D1B]/70 border border-[#2F3633]">
             <span class="block text-[11px] uppercase tracking-[0.18em] text-[#9A9E9B] mb-1.5">Echipament</span>
             <p class="text-sm sm:text-base font-medium text-[#F0F0E9]">Postav rapid, bile și tacuri pregătite pentru joc de calitate</p>
@@ -774,6 +779,37 @@
     </div>
   </div>
 
+  <!-- ==================== SCRIPT IMEDIAT PENTRU AFIȘAREA SECȚIUNILOR ==================== -->
+  <script>
+    (function () {
+      var revealEls = document.querySelectorAll('.reveal');
+      function showAll() {
+        for (var i = 0; i < revealEls.length; i++) {
+          revealEls[i].classList.add('is-visible');
+        }
+      }
+
+      if ('IntersectionObserver' in window) {
+        document.documentElement.classList.add('js-reveal-ready');
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.01 });
+
+        for (var i = 0; i < revealEls.length; i++) {
+          observer.observe(revealEls[i]);
+        }
+        setTimeout(showAll, 700);
+      } else {
+        showAll();
+      }
+    })();
+  </script>
+
   <!-- ==================== INTEGRARE FIREBASE APP CHECK + REALTIME DATABASE ==================== -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
@@ -1130,7 +1166,7 @@
       await remove(ref(firebaseRtdb, `tournaments/${id}`));
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initAppUI() {
       const yearEl = document.getElementById('current-year');
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
@@ -1307,4 +1343,204 @@
           } else {
             saveLockoutState({
               fails: nextFails,
-              lock
+              lockUntil: 0,
+              penaltyStep: state.penaltyStep
+            });
+            const remainingTries = 3 - nextFails;
+            loginError.textContent = `${translateFirebaseError(err.code)} (Mai ai ${remainingTries} ${remainingTries === 1 ? 'încercare' : 'încercări'} înainte de blocare temporară.)`;
+            loginError.classList.remove('hidden');
+            loginSubmitBtn.disabled = false;
+            loginSubmitBtn.textContent = 'Intră în panou';
+          }
+        }
+      });
+
+      document.getElementById('admin-logout-btn')?.addEventListener('click', performAdminLogout);
+      document.getElementById('nav-logout-btn')?.addEventListener('click', performAdminLogout);
+
+      const tournamentForm = document.getElementById('tournament-form');
+      const editingIdInput = document.getElementById('editing-event-id');
+      const formPanelTitle = document.getElementById('form-panel-title');
+      const submitTournamentBtn = document.getElementById('submit-tournament-btn');
+      const cancelEditBtn = document.getElementById('cancel-edit-btn');
+      const formFeedbackMsg = document.getElementById('form-feedback-msg');
+
+      function showFormFeedback(msg, isError = false) {
+        formFeedbackMsg.textContent = msg;
+        formFeedbackMsg.className = isError
+          ? 'text-xs text-[#E57373]'
+          : 'text-xs text-[#2E9E6B]';
+        formFeedbackMsg.classList.remove('hidden');
+        setTimeout(() => formFeedbackMsg.classList.add('hidden'), 4000);
+      }
+
+      function resetTournamentForm() {
+        editingIdInput.value = '';
+        tournamentForm.reset();
+        document.getElementById('event-type').value = 'Bila 9';
+        document.getElementById('event-time').value = '18:00';
+        formPanelTitle.textContent = 'Adaugă un concurs nou';
+        submitTournamentBtn.textContent = 'Publică concursul';
+        cancelEditBtn.classList.add('hidden');
+      }
+
+      cancelEditBtn.addEventListener('click', resetTournamentForm);
+
+      tournamentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isAdminAuthenticated()) return;
+
+        const payload = {
+          title: document.getElementById('event-title').value.trim(),
+          gameType: document.getElementById('event-type').value,
+          date: document.getElementById('event-date').value,
+          time: document.getElementById('event-time').value,
+          externalLink: document.getElementById('event-link').value.trim(),
+          description: document.getElementById('event-description').value.trim()
+        };
+
+        if (!payload.title || !payload.date || !payload.time) return;
+
+        const editId = editingIdInput.value;
+        submitTournamentBtn.disabled = true;
+        submitTournamentBtn.textContent = 'Se salvează...';
+
+        try {
+          if (editId) {
+            await editTournament(editId, payload);
+            showFormFeedback('Concursul a fost actualizat în Realtime Database.');
+          } else {
+            await createTournament(payload);
+            showFormFeedback('Concursul a fost publicat live.');
+          }
+          resetTournamentForm();
+        } catch (err) {
+          console.error(err);
+          showFormFeedback(translateFirebaseError(err.code), true);
+        } finally {
+          submitTournamentBtn.disabled = false;
+          submitTournamentBtn.textContent = editingIdInput.value ? 'Salvează modificările' : 'Publică concursul';
+        }
+      });
+
+      document.getElementById('seed-demo-btn')?.addEventListener('click', async () => {
+        if (!isAdminAuthenticated()) return;
+        try {
+          for (const item of DEFAULT_TOURNAMENTS) {
+            await createTournament(item);
+          }
+          showFormFeedback('Concursurile demonstrative au fost adăugate.');
+        } catch (err) {
+          showFormFeedback(translateFirebaseError(err.code), true);
+        }
+      });
+
+      async function handleTournamentActionClick(e) {
+        if (!isAdminAuthenticated()) return;
+        const target = e.target.closest('button');
+        if (!target) return;
+
+        const editId = target.getAttribute('data-edit-id');
+        if (editId) {
+          const item = tournamentsState.find((ev) => ev.id === editId);
+          if (item) {
+            editingIdInput.value = item.id;
+            document.getElementById('event-title').value = item.title;
+            document.getElementById('event-type').value = item.gameType;
+            document.getElementById('event-date').value = item.date;
+            document.getElementById('event-time').value = item.time;
+            document.getElementById('event-link').value = item.externalLink || '';
+            document.getElementById('event-description').value = item.description || '';
+            formPanelTitle.textContent = 'Editează concursul';
+            submitTournamentBtn.textContent = 'Salvează modificările';
+            cancelEditBtn.classList.remove('hidden');
+            tournamentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        const deleteId = target.getAttribute('data-delete-id');
+        if (deleteId) {
+          pendingDeleteId = deleteId;
+          renderTournaments();
+          return;
+        }
+
+        if (target.getAttribute('data-cancel-delete')) {
+          pendingDeleteId = null;
+          renderTournaments();
+          return;
+        }
+
+        const confirmDeleteId = target.getAttribute('data-confirm-delete-id');
+        if (confirmDeleteId) {
+          pendingDeleteId = null;
+          try {
+            await removeTournament(confirmDeleteId);
+            if (editingIdInput.value === confirmDeleteId) resetTournamentForm();
+          } catch (err) {
+            showFormFeedback(translateFirebaseError(err.code), true);
+          }
+        }
+      }
+
+      document.getElementById('tournaments-grid').addEventListener('click', handleTournamentActionClick);
+      document.getElementById('admin-tournaments-list').addEventListener('click', handleTournamentActionClick);
+
+      document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!isAdminAuthenticated() || !firebaseAuth.currentUser) return;
+        const newPassInput = document.getElementById('new-admin-password');
+        const msgEl = document.getElementById('password-change-msg');
+        const newPass = newPassInput.value;
+
+        if (!newPass || newPass.length < 6) {
+          msgEl.textContent = 'Minim 6 caractere.';
+          return;
+        }
+
+        try {
+          await updatePassword(firebaseAuth.currentUser, newPass);
+          newPassInput.value = '';
+          msgEl.textContent = 'Parola Firebase a fost actualizată.';
+        } catch (err) {
+          msgEl.textContent = translateFirebaseError(err.code);
+        }
+        setTimeout(() => { msgEl.textContent = ''; }, 4000);
+      });
+
+      onAuthStateChanged(firebaseAuth, (user) => {
+        currentAdminUser = user;
+        syncAdminUI();
+      });
+
+      onValue(
+        tournamentsRef,
+        (snapshot) => {
+          const val = snapshot.val();
+          if (!val) {
+            tournamentsState = [];
+          } else {
+            tournamentsState = Object.keys(val).map((key) => ({
+              id: key,
+              ...val[key]
+            }));
+          }
+          renderTournaments();
+        },
+        (error) => {
+          console.error('Eroare citire Realtime Database:', error);
+          document.getElementById('tournaments-loading')?.classList.add('hidden');
+          document.getElementById('tournaments-empty')?.classList.remove('hidden');
+        }
+      );
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAppUI);
+    } else {
+      initAppUI();
+    }
+  </script>
+</body>
+</html>
