@@ -3,22 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Friends Room Billiards Club</title>
-  <meta name="description" content="Friends Room Billiards Club — Mese profesionale de biliard, zonă lounge, comunitate activă și concursuri periodice." />
+  <meta name="theme-color" content="#101211" />
+  <title>Friends Room Billiards Club | Biliard &amp; Lounge Ploiești</title>
+  <meta name="description" content="Club de biliard și lounge în Ploiești. Mese de joc pentru Bila 7, Bila 8, Bila 9 și Bila 10, antrenament liber, bar și concursuri locale." />
+  <meta name="robots" content="index, follow" />
 
-  <!-- Tipografie Minimalistă -->
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="ro_RO" />
+  <meta property="og:title" content="Friends Room Billiards Club | Ploiești" />
+  <meta property="og:description" content="Mese de biliard, zonă lounge și turnee de Bila 7, 8, 9 și 10 în Ploiești." />
+
+  <!-- Date structurate locale -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SportsActivityLocation",
+    "name": "Friends Room Billiards Club",
+    "description": "Club de biliard și lounge în Ploiești pentru Bila 7, Bila 8, Bila 9 și Bila 10.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Ploiești",
+      "addressRegion": "Prahova",
+      "addressCountry": "RO"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 44.9406617,
+      "longitude": 26.0248011
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "14:00",
+      "closes": "02:00"
+    }
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Gestionare inteligentă a imaginilor (.jpeg / .jpg / .png / .webp + cadru de rezervă) -->
   <script>
     window.handleClubImageFallback = function (img, labelText) {
       if (!img) return;
-      var extensions = ['.jpeg', '.jpg', '.png', '.webp'];
+      var extensions = ['.jpeg', '.jpg', '.png', '.webp', '.JPEG', '.JPG', '.PNG'];
       var baseName = img.getAttribute('data-base') || '';
       var attempt = parseInt(img.getAttribute('data-attempt') || '0', 10);
 
@@ -33,12 +73,19 @@
       img.style.display = 'none';
       var parent = img.parentElement;
       if (parent && !parent.querySelector('.img-fallback-box')) {
+        var isCompact = img.getAttribute('data-compact') === 'true';
         var fallback = document.createElement('div');
-        fallback.className = 'img-fallback-box w-full h-full min-h-[220px] flex flex-col items-center justify-center bg-[#141716] border border-[#2F3633] rounded-[2px] px-6 py-10 text-center';
-        fallback.innerHTML =
-          '<span class="text-sm sm:text-lg font-medium tracking-wide text-[#9A9E9B]">' +
-          (labelText || 'Friends Room Billiards') +
-          '</span>';
+        if (isCompact) {
+          fallback.className = 'img-fallback-box w-full h-full flex items-center justify-center bg-[#191D1B] text-xs font-display font-bold tracking-wider text-[#F0F0E9]';
+        } else {
+          fallback.className = 'img-fallback-box w-full h-full min-h-[220px] flex flex-col items-center justify-center bg-[#141716] border border-[#2F3633] rounded-[2px] px-6 py-10 text-center';
+        }
+        var span = document.createElement('span');
+        span.className = isCompact
+          ? 'text-xs font-bold text-[#F0F0E9]'
+          : 'text-sm sm:text-lg font-medium tracking-wide text-[#9A9E9B]';
+        span.textContent = labelText || 'Friends Room Billiards';
+        fallback.appendChild(span);
         parent.appendChild(fallback);
       }
     };
@@ -68,7 +115,6 @@
       font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     }
 
-    /* Iconițe vizibile (albe/contrastante) pentru selectoarele de Dată și Oră */
     input[type="date"],
     input[type="time"] {
       color-scheme: dark;
@@ -106,11 +152,6 @@
       background: #3F4844;
     }
 
-    .reveal {
-      opacity: 1 !important;
-      transform: none !important;
-    }
-
     .bg-club-grid {
       background-image:
         linear-gradient(to right, rgba(47, 54, 51, 0.16) 1px, transparent 1px),
@@ -121,7 +162,7 @@
 </head>
 <body class="bg-[#101211] text-[#F0F0E9] selection:bg-[#164D36] selection:text-[#F0F0E9]">
 
-  <!-- ==================== NAVBAR ==================== -->
+  <!-- Header -->
   <header class="sticky top-0 z-40 bg-[#101211]/95 backdrop-blur-md border-b border-[#2F3633]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
       <a href="#acasa" class="flex items-center gap-3.5 group focus:outline-none">
@@ -130,6 +171,7 @@
             src="logo.jpeg"
             data-base="logo"
             data-attempt="0"
+            data-compact="true"
             alt="Friends Room Logo"
             class="w-full h-full object-cover"
             onerror="window.handleClubImageFallback(this, 'FR')"
@@ -201,7 +243,7 @@
   </header>
 
   <main>
-    <!-- ==================== HERO / ACASĂ ==================== -->
+    <!-- Hero / Acasă -->
     <section id="acasa" class="relative bg-club-grid border-b border-[#2F3633]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -209,16 +251,16 @@
             <div class="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-[2px] bg-[#191D1B] border border-[#2F3633] mb-6">
               <span class="w-2 h-2 rounded-full bg-[#164D36]"></span>
               <span class="text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B]">
-                Billiards &amp; Lounge • Ploiești
+                Ploiești • Zilnic 14:00 - 02:00
               </span>
             </div>
 
-            <h1 class="font-display text-3xl sm:text-5xl lg:text-[54px] font-bold tracking-tight text-[#F0F0E9] leading-[1.12] mb-6">
-              Precizie la masă, atmosferă relaxată între prieteni.
+            <h1 class="font-display text-3xl sm:text-5xl lg:text-[52px] font-bold tracking-tight text-[#F0F0E9] leading-[1.12] mb-6">
+              Club de biliard și lounge în Ploiești.
             </h1>
 
             <p class="text-base sm:text-lg text-[#9A9E9B] leading-relaxed max-w-2xl mb-9">
-              La <span class="text-[#F0F0E9] font-medium">Friends Room Billiards Club</span> găsești mese de biliard întreținute impecabil, o zonă lounge confortabilă și o comunitate activă de jucători pasionați de Bila 7, Bila 8, Bila 9 și Bila 10.
+              La <span class="text-[#F0F0E9] font-medium">Friends Room</span> poți veni la joc liber cu prietenii, la antrenament sau la concursurile periodice de Bila 7, Bila 8, Bila 9 și Bila 10.
             </p>
 
             <div class="flex flex-wrap items-center gap-4">
@@ -226,13 +268,13 @@
                 href="#concursuri"
                 class="inline-flex items-center justify-center px-6 py-3.5 rounded-[2px] bg-[#164D36] hover:bg-[#1D6346] text-[#F0F0E9] text-sm font-semibold tracking-wide transition-colors"
               >
-                Vezi concursurile
+                Concursuri programate
               </a>
               <a
                 href="#contact"
                 class="inline-flex items-center justify-center px-6 py-3.5 rounded-[2px] bg-[#191D1B] hover:bg-[#222825] border border-[#2F3633] text-[#F0F0E9] text-sm font-medium tracking-wide transition-colors"
               >
-                Locație &amp; Contact
+                Cum ajungi la club
               </a>
             </div>
           </div>
@@ -250,47 +292,49 @@
                 />
               </div>
               <div class="mt-4 pt-4 border-t border-[#2F3633] flex items-center justify-between text-xs text-[#9A9E9B]">
-                <span>Mese profesionale</span>
+                <span>Joc liber &amp; turnee</span>
                 <span class="text-[#F0F0E9] font-medium">Bila 7 • 8 • 9 • 10</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="mt-14 pt-10 border-t border-[#2F3633] grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div class="p-5 rounded-[2px] bg-[#191D1B]/70 border border-[#2F3633]">
-            <span class="block text-[11px] uppercase tracking-[0.18em] text-[#9A9E9B] mb-1.5">Echipament</span>
-            <p class="text-sm sm:text-base font-medium text-[#F0F0E9]">Postav rapid, bile și tacuri pregătite pentru joc de calitate</p>
+        <div class="mt-14 rounded-[2px] bg-[#191D1B]/80 border border-[#2F3633] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#2F3633]">
+          <div class="p-5">
+            <span class="block text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B] mb-1">Mese &amp; Echipament</span>
+            <p class="text-sm font-medium text-[#F0F0E9]">Postav schimbat periodic, bile de turneu și tacuri la dispoziție</p>
           </div>
-          <div class="p-5 rounded-[2px] bg-[#191D1B]/70 border border-[#2F3633]">
-            <span class="block text-[11px] uppercase tracking-[0.18em] text-[#9A9E9B] mb-1.5">Competiții</span>
-            <p class="text-sm sm:text-base font-medium text-[#F0F0E9]">Turnee locale organizate constant pentru toate nivelurile</p>
+          <div class="p-5">
+            <span class="block text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B] mb-1">Turnee locale</span>
+            <p class="text-sm font-medium text-[#F0F0E9]">Ediții regulate de Bila 7, 8, 9 și 10 cu înscriere la bar sau online</p>
           </div>
-          <div class="p-5 rounded-[2px] bg-[#191D1B]/70 border border-[#2F3633]">
-            <span class="block text-[11px] uppercase tracking-[0.18em] text-[#9A9E9B] mb-1.5">Atmosferă</span>
-            <p class="text-sm sm:text-base font-medium text-[#F0F0E9]">Zonă lounge aerisită, muzică discretă și bar complet</p>
+          <div class="p-5">
+            <span class="block text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B] mb-1">Zonă Lounge</span>
+            <p class="text-sm font-medium text-[#F0F0E9]">Mese pentru însoțitori, cafea, băuturi reci și gustări</p>
+          </div>
+          <div class="p-5">
+            <span class="block text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B] mb-1">Program</span>
+            <p class="text-sm font-medium text-[#F0F0E9]">Deschis în fiecare zi, de la 14:00 până la 02:00</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== CLUB & FACILITĂȚI ==================== -->
+    <!-- Club & Facilități -->
     <section id="club" class="py-16 sm:py-24 border-b border-[#2F3633]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end pb-8 border-b border-[#2F3633]">
-          <div class="lg:col-span-6">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-8 border-b border-[#2F3633]">
+          <div>
             <span class="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B] mb-2">
-              Spațiul Clubului
+              Sala de joc
             </span>
             <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#F0F0E9] tracking-tight">
               Club &amp; Facilități
             </h2>
           </div>
-          <div class="lg:col-span-6">
-            <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed">
-              Totul este gândit pentru confortul jucătorilor și al grupurilor de prieteni care vor să petreacă timp de calitate împreună.
-            </p>
-          </div>
+          <p class="text-sm sm:text-base text-[#9A9E9B] max-w-xl">
+            Spațiu aerisit, distanță bună între mese și o zonă separată unde poți sta între partide.
+          </p>
         </div>
 
         <div class="mt-8">
@@ -306,41 +350,38 @@
           </div>
         </div>
 
-        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
-            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-[#9A9E9B]">01 / Mese &amp; Iluminare</span>
-            <h3 class="font-display text-lg font-semibold text-[#F0F0E9] mt-3 mb-2">
-              Condiții optime de joc
+        <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 p-6 sm:p-8 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
+            <h3 class="font-display text-lg sm:text-xl font-semibold text-[#F0F0E9] mb-3">
+              Mesele de biliard și condițiile de joc
             </h3>
+            <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed mb-4">
+              Fiecare masă are lumină dedicată deasupra suprafeței de joc și loc suficient pe margini pentru loviturile din mantă, fără să te încurci cu jucătorii de la masa vecină.
+            </p>
             <p class="text-sm text-[#9A9E9B] leading-relaxed">
-              Iluminare uniformă fără umbre pe suprafața de joc și spațiu generos în jurul fiecărei mese pentru lovituri curate.
+              Dacă nu ai tacul tău la tine, găsești tacuri drepte la rastel, cretă și triunghiuri pregătite la fiecare masă.
             </p>
           </div>
 
-          <div class="p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
-            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-[#9A9E9B]">02 / Lounge &amp; Bar</span>
-            <h3 class="font-display text-lg font-semibold text-[#F0F0E9] mt-3 mb-2">
-              Confort între partide
-            </h3>
-            <p class="text-sm text-[#9A9E9B] leading-relaxed">
-              Zonă de relaxare dedicată jucătorilor și însoțitorilor, cu băuturi reci, cafea și gustări disponibile pe tot parcursul serii.
-            </p>
-          </div>
-
-          <div class="p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
-            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-[#9A9E9B]">03 / Accesibilitate</span>
-            <h3 class="font-display text-lg font-semibold text-[#F0F0E9] mt-3 mb-2">
-              Deschis zilnic
-            </h3>
-            <p class="text-sm text-[#9A9E9B] leading-relaxed">
-              Poți veni atât pentru antrenament individual, cât și pentru seri de biliard cu prietenii sau înscriere la competiții.
-            </p>
+          <div class="lg:col-span-5 p-6 sm:p-8 rounded-[2px] bg-[#191D1B] border border-[#2F3633] flex flex-col justify-between">
+            <div>
+              <h3 class="font-display text-lg sm:text-xl font-semibold text-[#F0F0E9] mb-3">
+                Bar, lounge și acces
+              </h3>
+              <p class="text-sm text-[#9A9E9B] leading-relaxed mb-4">
+                Poți veni singur pentru antrenament sau cu grupul de prieteni. Nu este nevoie de abonament: plătești doar timpul jucat la masă.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-[#2F3633] flex items-center justify-between text-xs">
+              <span class="text-[#9A9E9B]">Program zilnic</span>
+              <span class="text-[#F0F0E9] font-medium">14:00 - 02:00</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== COMUNITATE ==================== -->
+    <!-- Comunitate -->
     <section id="comunitate" class="py-16 sm:py-24 border-b border-[#2F3633] bg-[#121514]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -350,7 +391,7 @@
                 src="masa10.jpeg"
                 data-base="masa10"
                 data-attempt="0"
-                alt="Comunitatea Friends Room la masa de biliard"
+                alt="Jucători la masa de biliard în Friends Room"
                 class="w-full h-full object-cover"
                 onerror="window.handleClubImageFallback(this, 'Friends Room - masa10.jpeg')"
               />
@@ -359,26 +400,26 @@
 
           <div class="lg:col-span-6">
             <span class="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B] mb-2">
-              Oameni &amp; Fair-Play
+              Jucători &amp; Turnee
             </span>
             <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#F0F0E9] tracking-tight mb-5">
               Comunitate
             </h2>
             <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed mb-4">
-              Friends Room s-a format în jurul pasiunii reale pentru biliard. Aici se întâlnesc atât jucători aflați la primele lovituri, cât și competitori experimentați care își testează constant strategia și precizia.
+              La Friends Room se strâng atât jucători care joacă de plăcere după muncă sau facultate, cât și pasionați din Ploiești care participă regulat la turnee locale.
             </p>
             <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed mb-7">
-              Organizăm seri amicale, meciuri demonstrative și concursuri pe sisteme echilibrate, astfel încât fiecare jucător să aibă parte de partide disputate și atmosferă prietenoasă.
+              Concursurile sunt deschise oricui vrea să își testeze jocul în format de competiție, iar înscrierile se fac simplu, direct la bar sau prin linkul afișat la fiecare eveniment.
             </p>
 
             <div class="grid grid-cols-2 gap-4 pt-5 border-t border-[#2F3633]">
               <div>
-                <span class="block font-display text-xl sm:text-2xl font-bold text-[#F0F0E9]">4 Formate</span>
-                <span class="text-xs text-[#9A9E9B]">Bila 7, Bila 8, Bila 9 și Bila 10</span>
+                <span class="block font-display text-lg sm:text-xl font-bold text-[#F0F0E9]">Bila 7, 8, 9 &amp; 10</span>
+                <span class="text-xs text-[#9A9E9B]">Toate cele 4 formate jucate în club</span>
               </div>
               <div>
-                <span class="block font-display text-xl sm:text-2xl font-bold text-[#F0F0E9]">100% Fair-Play</span>
-                <span class="text-xs text-[#9A9E9B]">Respect la masă și comunitate deschisă</span>
+                <span class="block font-display text-lg sm:text-xl font-bold text-[#F0F0E9]">Tablou deschis</span>
+                <span class="text-xs text-[#9A9E9B]">Înscrieri libere pentru amatori și avansați</span>
               </div>
             </div>
           </div>
@@ -386,13 +427,13 @@
       </div>
     </section>
 
-    <!-- ==================== CONCURSURI ȘI EVENIMENTE ==================== -->
+    <!-- Concursuri și evenimente -->
     <section id="concursuri" class="py-16 sm:py-24 border-b border-[#2F3633]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-[#2F3633]">
           <div>
             <span class="block text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B] mb-2">
-              Calendar Competițional
+              Program competiții
             </span>
             <h2 class="font-display text-2xl sm:text-4xl font-bold text-[#F0F0E9] tracking-tight">
               Concursuri și evenimente
@@ -418,24 +459,21 @@
           </div>
         </div>
 
-        <!-- Indicator încărcare Realtime Database -->
         <div id="tournaments-loading" class="mt-8 p-8 rounded-[2px] bg-[#191D1B] border border-[#2F3633] text-center">
-          <p class="text-sm text-[#9A9E9B]">Se încarcă calendarul concursurilor...</p>
+          <p class="text-sm text-[#9A9E9B]">Se încarcă lista concursurilor...</p>
         </div>
 
-        <!-- Listă Concursuri (include butoane rapide Editează / Șterge când ești logat ca Admin) -->
         <div id="tournaments-grid" class="hidden mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
-        <!-- Mesaj listă goală -->
         <div id="tournaments-empty" class="hidden mt-8 p-10 rounded-[2px] bg-[#191D1B] border border-[#2F3633] text-center">
           <p class="text-sm sm:text-base text-[#9A9E9B]">
-            Nu există concursuri afișate pentru această categorie momentan. Revino în curând pentru actualizări.
+            Nu sunt concursuri programate la această categorie momentan. Revino în curând sau întreabă la bar.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- ==================== PANOU ADMINISTRARE (REALTIME DATABASE) ==================== -->
+    <!-- Panou administrare -->
     <section id="admin-panel" class="hidden py-16 sm:py-20 border-b border-[#2F3633] bg-[#141716]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#2F3633]">
@@ -445,8 +483,8 @@
                 Administrare Club
               </span>
               <span id="firebase-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[2px] text-[11px] font-medium bg-[#191D1B] border border-[#2F3633] text-[#9A9E9B]">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span>
-                Conectat la Firebase Realtime Database
+                <span id="firebase-status-dot" class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span>
+                <span id="firebase-status-text">Conectat la Firebase Realtime Database</span>
               </span>
             </div>
             <h2 class="font-display text-2xl sm:text-3xl font-bold text-[#F0F0E9]">
@@ -464,7 +502,6 @@
         </div>
 
         <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <!-- Formular Adăugare / Editare Concurs -->
           <div class="lg:col-span-6 p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
             <div class="flex items-center justify-between mb-5">
               <h3 id="form-panel-title" class="font-display text-lg font-semibold text-[#F0F0E9]">
@@ -556,7 +593,7 @@
                 <textarea
                   id="event-description"
                   rows="3"
-                  placeholder="Detalii despre competiție sau regulament..."
+                  placeholder="Detalii despre competiție, taxă de participare sau sistem de joc..."
                   class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] focus:outline-none focus:border-[#164D36]"
                 ></textarea>
               </div>
@@ -572,7 +609,6 @@
               </button>
             </form>
 
-            <!-- Schimbare parolă Administrator -->
             <div class="mt-8 pt-6 border-t border-[#2F3633]">
               <h4 class="text-xs font-semibold uppercase tracking-[0.16em] text-[#9A9E9B] mb-4">
                 Schimbare parolă Administrator
@@ -599,7 +635,6 @@
             </div>
           </div>
 
-          <!-- Gestionare Concursuri Existente -->
           <div class="lg:col-span-6 p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
             <div class="flex items-center justify-between gap-3 mb-5">
               <h3 class="font-display text-lg font-semibold text-[#F0F0E9]">
@@ -619,7 +654,7 @@
       </div>
     </section>
 
-    <!-- ==================== CONTACT ȘI LOCAȚIE ==================== -->
+    <!-- Contact și locație -->
     <section id="contact" class="py-16 sm:py-24">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
@@ -631,21 +666,21 @@
               Contact și locație
             </h2>
             <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed mb-8">
-              Te așteptăm la masa de biliard pentru antrenament, seri cu prietenii sau înscrieri la următoarele concursuri ale clubului.
+              Ne găsești în Ploiești. Poți veni direct în programul de funcționare pentru o masă liberă sau pentru înscrierea la concursurile anunțate.
             </p>
 
             <div class="space-y-5 border-t border-[#2F3633] pt-6">
               <div>
                 <span class="block text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B] mb-1">Locație</span>
                 <p class="text-sm sm:text-base font-medium text-[#F0F0E9]">
-                  Friends Room Billiards Club — Ploiești, Prahova
+                  Friends Room Billiards, Ploiești, Prahova
                 </p>
               </div>
 
               <div>
                 <span class="block text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B] mb-1">Program</span>
                 <p class="text-sm sm:text-base text-[#F0F0E9]">
-                  Luni – Duminică: 14:00 – 02:00
+                  Luni - Duminică: 14:00 - 02:00
                 </p>
               </div>
 
@@ -668,9 +703,9 @@
           <div class="lg:col-span-7">
             <div class="w-full h-[320px] sm:h-[380px] rounded-[2px] overflow-hidden border border-[#2F3633] bg-[#191D1B]">
               <iframe
-                title="Harta Friends Room Billiards Club"
+                title="Harta Friends Room Billiards Club Ploiești"
                 src="https://maps.google.com/maps?q=44.9406617,26.0248011&z=16&output=embed"
-                class="w-full h-full border-0 grayscale contrast-125 opacity-90"
+                class="w-full h-full border-0 contrast-105 opacity-95"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
@@ -681,13 +716,15 @@
     </section>
   </main>
 
-  <!-- ==================== FOOTER ==================== -->
+  <!-- Footer -->
   <footer class="border-t border-[#2F3633] bg-[#101211]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#9A9E9B]">
       <div class="flex items-center gap-2.5">
         <span class="font-display font-semibold uppercase tracking-[0.12em] text-[#F0F0E9]">
           Friends Room Billiards Club
         </span>
+        <span>•</span>
+        <span>Ploiești</span>
         <span>•</span>
         <span>© <span id="current-year"></span></span>
       </div>
@@ -701,7 +738,7 @@
     </div>
   </footer>
 
-  <!-- ==================== MODAL AUTENTIFICARE ADMIN ==================== -->
+  <!-- Modal autentificare admin -->
   <div
     id="admin-login-modal"
     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
@@ -769,7 +806,7 @@
     </div>
   </div>
 
-  <!-- ==================== INTEGRARE FIREBASE APP CHECK + REALTIME DATABASE ==================== -->
+  <!-- Firebase App Check, Auth & Realtime Database -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
     import {
@@ -808,22 +845,25 @@
 
     const firebaseApp = initializeApp(firebaseConfig);
 
-    initializeAppCheck(firebaseApp, {
-      provider: new ReCaptchaEnterpriseProvider('6LfXpy4uAAAAAHxxRWbTfNGQLa8w1ABJSmkzaHFf'),
-      isTokenAutoRefreshEnabled: true
-    });
+    try {
+      initializeAppCheck(firebaseApp, {
+        provider: new ReCaptchaEnterpriseProvider('6LfXpy4uAAAAAHxxRWbTfNGQLa8w1ABJSmkzaHFf'),
+        isTokenAutoRefreshEnabled: true
+      });
+    } catch (err) {
+      console.warn('App Check indisponibil în acest browser:', err);
+    }
 
     const firebaseAuth = getAuth(firebaseApp);
     const firebaseRtdb = getDatabase(firebaseApp);
 
-    /* Deconectare automată la închiderea tab-ului / browserului */
     setPersistence(firebaseAuth, browserSessionPersistence).catch((err) => {
       console.error('Eroare configurare persistență sesiune:', err);
     });
 
     const DEFAULT_TOURNAMENTS = [
       {
-        title: 'Open Friends Room — Bila 9',
+        title: 'Open Friends Room - Bila 9',
         gameType: 'Bila 9',
         date: '2026-11-28',
         time: '17:00',
@@ -831,19 +871,19 @@
         externalLink: ''
       },
       {
-        title: 'Seara Campionilor — Bila 8',
+        title: 'Turneu de seară - Bila 8',
         gameType: 'Bila 8',
         date: '2026-12-05',
         time: '18:00',
-        description: 'Competiție deschisă tuturor jucătorilor clubului. Meciuri disputate după regulamentul standard WPA.',
+        description: 'Concurs deschis jucătorilor din club, regulament standard WPA.',
         externalLink: ''
       },
       {
-        title: 'Challenge de Iarnă — Bila 10',
+        title: 'Ediție de weekend - Bila 10',
         gameType: 'Bila 10',
         date: '2026-12-12',
         time: '16:30',
-        description: 'Format cu lovitură anunțată pentru precizie maximă la masă.',
+        description: 'Meciuri cu lovitură anunțată. Detalii și înscrieri la bar.',
         externalLink: ''
       }
     ];
@@ -867,6 +907,7 @@
       if (!/^https?:\/\//i.test(trimmed)) trimmed = 'https://' + trimmed;
       try {
         const parsed = new URL(trimmed);
+        if (!/^https?:$/i.test(parsed.protocol)) return '';
         if (!parsed.hostname || !parsed.hostname.includes('.')) return '';
         return parsed.toString();
       } catch (e) {
@@ -949,9 +990,23 @@
     let activeFilter = 'Toate';
     let pendingDeleteId = null;
     let currentAdminUser = null;
+    let onLogoutCleanup = null;
 
     function isAdminAuthenticated() {
       return Boolean(currentAdminUser);
+    }
+
+    function setFirebaseConnectionStatus(connected, customText) {
+      const dot = document.getElementById('firebase-status-dot');
+      const text = document.getElementById('firebase-status-text');
+      if (!dot || !text) return;
+      if (connected) {
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-[#2E9E6B]';
+        text.textContent = customText || 'Conectat la Firebase Realtime Database';
+      } else {
+        dot.className = 'w-1.5 h-1.5 rounded-full bg-[#E57373]';
+        text.textContent = customText || 'Eroare conexiune Realtime Database';
+      }
     }
 
     function renderTournaments() {
@@ -963,12 +1018,12 @@
       if (loadingBox) loadingBox.classList.add('hidden');
 
       const sorted = tournamentsState.slice().sort((a, b) =>
-        String(`${a.date} ${a.time}`).localeCompare(String(`${b.date} ${b.time}`))
+        `${a.date || ''} ${a.time || ''}`.localeCompare(`${b.date || ''} ${b.time || ''}`)
       );
 
       const filtered = activeFilter === 'Toate'
         ? sorted
-        : sorted.filter((item) => item.gameType === activeFilter);
+        : sorted.filter((item) => (item.gameType || 'Bila 8') === activeFilter);
 
       if (!filtered.length) {
         grid.classList.add('hidden');
@@ -978,6 +1033,8 @@
         emptyBox.classList.add('hidden');
         grid.classList.remove('hidden');
         grid.innerHTML = filtered.map((ev) => {
+          const gameType = ev.gameType || 'Bila 8';
+          const title = ev.title || 'Concurs Friends Room';
           const safeLink = normalizeExternalUrl(ev.externalLink);
           const isConfirming = pendingDeleteId === ev.id;
 
@@ -1000,23 +1057,23 @@
               <div>
                 <div class="flex items-center justify-between gap-3 mb-5">
                   <div class="inline-flex items-center gap-2.5">
-                    ${renderBallGraphic(ev.gameType)}
+                    ${renderBallGraphic(gameType)}
                     <span class="px-2.5 py-1 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[11px] font-medium uppercase tracking-[0.14em] text-[#F0F0E9]">
-                      ${escapeHtml(ev.gameType)}
+                      ${escapeHtml(gameType)}
                     </span>
                   </div>
                   <span class="text-xs font-medium text-[#9A9E9B]">
-                    ${escapeHtml(formatDateRo(ev.date))} • ${escapeHtml(ev.time || '')}
+                    ${escapeHtml(formatDateRo(ev.date))}${ev.time ? ' • ' + escapeHtml(ev.time) : ''}
                   </span>
                 </div>
 
                 <h3 class="font-display text-lg sm:text-xl font-semibold text-[#F0F0E9] leading-snug mb-3">
-                  ${escapeHtml(ev.title)}
+                  ${escapeHtml(title)}
                 </h3>
 
                 ${ev.description
                   ? `<p class="text-sm text-[#9A9E9B] leading-relaxed mb-5">${escapeHtml(ev.description)}</p>`
-                  : `<p class="text-sm text-[#6E7370] italic mb-5">Detalii disponibile la recepția clubului.</p>`}
+                  : `<p class="text-sm text-[#6E7370] italic mb-5">Detalii disponibile la bar.</p>`}
               </div>
 
               <div>
@@ -1054,15 +1111,17 @@
 
       listEl.innerHTML = sortedAll.map((ev) => {
         const isConfirming = pendingDeleteId === ev.id;
+        const gameType = ev.gameType || 'Bila 8';
+        const title = ev.title || 'Concurs Friends Room';
         return `
           <div class="p-4 rounded-[2px] bg-[#101211] border border-[#2F3633] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <div class="flex items-center gap-2 text-xs text-[#9A9E9B] mb-1">
-                <span class="text-[#F0F0E9] font-medium">${escapeHtml(ev.gameType)}</span>
+                <span class="text-[#F0F0E9] font-medium">${escapeHtml(gameType)}</span>
                 <span>•</span>
-                <span>${escapeHtml(formatDateRo(ev.date))} (${escapeHtml(ev.time)})</span>
+                <span>${escapeHtml(formatDateRo(ev.date))}${ev.time ? ' (' + escapeHtml(ev.time) + ')' : ''}</span>
               </div>
-              <h4 class="text-sm font-semibold text-[#F0F0E9]">${escapeHtml(ev.title)}</h4>
+              <h4 class="text-sm font-semibold text-[#F0F0E9]">${escapeHtml(title)}</h4>
             </div>
 
             <div class="flex items-center gap-2 shrink-0">
@@ -1104,6 +1163,7 @@
 
     async function performAdminLogout() {
       pendingDeleteId = null;
+      if (typeof onLogoutCleanup === 'function') onLogoutCleanup();
       await signOut(firebaseAuth);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1168,7 +1228,6 @@
       const loginSubmitBtn = document.getElementById('login-submit-btn');
       const userInput = document.getElementById('login-identifier');
 
-      /* Protecție anti brute-force pe formularul de login (blocaj progresiv după 3 greșeli) */
       const LOCKOUT_STORAGE_KEY = 'fr_admin_login_guard';
       let lockoutTimer = null;
 
@@ -1330,7 +1389,7 @@
           ? 'text-xs text-[#E57373]'
           : 'text-xs text-[#2E9E6B]';
         formFeedbackMsg.classList.remove('hidden');
-        setTimeout(() => formFeedbackMsg.classList.add('hidden'), 4000);
+        setTimeout(() => formFeedbackMsg.classList.add('hidden'), 4500);
       }
 
       function resetTournamentForm() {
@@ -1343,18 +1402,29 @@
         cancelEditBtn.classList.add('hidden');
       }
 
+      onLogoutCleanup = resetTournamentForm;
       cancelEditBtn.addEventListener('click', resetTournamentForm);
 
       tournamentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!isAdminAuthenticated()) return;
 
+        const rawLink = document.getElementById('event-link').value.trim();
+        let normalizedLink = '';
+        if (rawLink) {
+          normalizedLink = normalizeExternalUrl(rawLink);
+          if (!normalizedLink) {
+            showFormFeedback('Link-ul introdus nu este valid. Folosește o adresă web completă (ex: https://...).', true);
+            return;
+          }
+        }
+
         const payload = {
           title: document.getElementById('event-title').value.trim(),
           gameType: document.getElementById('event-type').value,
           date: document.getElementById('event-date').value,
           time: document.getElementById('event-time').value,
-          externalLink: document.getElementById('event-link').value.trim(),
+          externalLink: normalizedLink,
           description: document.getElementById('event-description').value.trim()
         };
 
@@ -1382,8 +1452,12 @@
         }
       });
 
-      document.getElementById('seed-demo-btn')?.addEventListener('click', async () => {
-        if (!isAdminAuthenticated()) return;
+      const seedDemoBtn = document.getElementById('seed-demo-btn');
+      seedDemoBtn?.addEventListener('click', async () => {
+        if (!isAdminAuthenticated() || seedDemoBtn.disabled) return;
+        seedDemoBtn.disabled = true;
+        const originalText = seedDemoBtn.textContent;
+        seedDemoBtn.textContent = 'Se adaugă...';
         try {
           for (const item of DEFAULT_TOURNAMENTS) {
             await createTournament(item);
@@ -1391,6 +1465,9 @@
           showFormFeedback('Concursurile demonstrative au fost adăugate.');
         } catch (err) {
           showFormFeedback(translateFirebaseError(err.code), true);
+        } finally {
+          seedDemoBtn.disabled = false;
+          seedDemoBtn.textContent = originalText;
         }
       });
 
@@ -1404,10 +1481,10 @@
           const item = tournamentsState.find((ev) => ev.id === editId);
           if (item) {
             editingIdInput.value = item.id;
-            document.getElementById('event-title').value = item.title;
-            document.getElementById('event-type').value = item.gameType;
-            document.getElementById('event-date').value = item.date;
-            document.getElementById('event-time').value = item.time;
+            document.getElementById('event-title').value = item.title || '';
+            document.getElementById('event-type').value = item.gameType || 'Bila 9';
+            document.getElementById('event-date').value = item.date || '';
+            document.getElementById('event-time').value = item.time || '18:00';
             document.getElementById('event-link').value = item.externalLink || '';
             document.getElementById('event-description').value = item.description || '';
             formPanelTitle.textContent = 'Editează concursul';
@@ -1433,6 +1510,7 @@
 
         const confirmDeleteId = target.getAttribute('data-confirm-delete-id');
         if (confirmDeleteId) {
+          target.disabled = true;
           pendingDeleteId = null;
           try {
             await removeTournament(confirmDeleteId);
@@ -1476,6 +1554,7 @@
       onValue(
         tournamentsRef,
         (snapshot) => {
+          setFirebaseConnectionStatus(true);
           const val = snapshot.val();
           if (!val) {
             tournamentsState = [];
@@ -1489,6 +1568,7 @@
         },
         (error) => {
           console.error('Eroare citire Realtime Database:', error);
+          setFirebaseConnectionStatus(false, 'Eroare citire Realtime Database');
           document.getElementById('tournaments-loading')?.classList.add('hidden');
           document.getElementById('tournaments-empty')?.classList.remove('hidden');
         }
