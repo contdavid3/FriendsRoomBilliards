@@ -8,13 +8,11 @@
   <meta name="description" content="Club de biliard și lounge în Ploiești. Mese de joc pentru Bila 7, Bila 8, Bila 9 și Bila 10, antrenament liber, bar și concursuri locale." />
   <meta name="robots" content="index, follow" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="ro_RO" />
   <meta property="og:title" content="Friends Room Billiards Club | Ploiești" />
   <meta property="og:description" content="Mese de biliard, zonă lounge și turnee de Bila 7, 8, 9 și 10 în Ploiești." />
 
-  <!-- Date structurate locale -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -196,24 +194,6 @@
       </nav>
 
       <div class="flex items-center gap-2 sm:gap-3">
-        <button
-          id="nav-admin-btn"
-          type="button"
-          class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-2 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-xs font-medium uppercase tracking-[0.12em] text-[#F0F0E9] transition-colors"
-        >
-          <span id="nav-admin-dot" class="w-1.5 h-1.5 rounded-full bg-[#6E7370]"></span>
-          <span id="nav-admin-label">Admin</span>
-        </button>
-
-        <button
-          id="nav-logout-btn"
-          type="button"
-          title="Deconectare din panoul de administrare"
-          class="hidden inline-flex items-center gap-1.5 px-3 py-2 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-xs font-medium uppercase tracking-[0.12em] text-[#F2B8B5] hover:text-white transition-colors"
-        >
-          <span>Ieșire</span>
-        </button>
-
         <button
           id="mobile-menu-toggle"
           type="button"
@@ -408,9 +388,23 @@
             <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed mb-4">
               La Friends Room se strâng atât jucători care joacă de plăcere după muncă sau facultate, cât și pasionați din Ploiești care participă regulat la turnee locale.
             </p>
-            <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed mb-7">
+            <p class="text-sm sm:text-base text-[#9A9E9B] leading-relaxed mb-6">
               Concursurile sunt deschise oricui vrea să își testeze jocul în format de competiție, iar înscrierile se fac simplu, direct la bar sau prin linkul afișat la fiecare eveniment.
             </p>
+
+            <div class="mb-7">
+              <a
+                href="https://www.facebook.com/p/Friends-Room-61579668841613/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-[2px] bg-[#191D1B] hover:bg-[#222825] border border-[#2F3633] text-xs font-medium uppercase tracking-[0.12em] text-[#F0F0E9] transition-colors"
+              >
+                <svg class="w-4 h-4 text-[#F0F0E9]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                </svg>
+                <span>Fotografii &amp; noutăți pe Facebook</span>
+              </a>
+            </div>
 
             <div class="grid grid-cols-2 gap-4 pt-5 border-t border-[#2F3633]">
               <div>
@@ -625,6 +619,7 @@
                 <div class="flex items-center justify-between gap-3">
                   <span id="password-change-msg" class="text-xs text-[#9A9E9B]"></span>
                   <button
+                    id="change-password-btn"
                     type="submit"
                     class="px-4 py-2 rounded-[2px] border border-[#2F3633] bg-[#101211] hover:border-[#4A5550] text-xs font-medium uppercase tracking-[0.12em] text-[#F0F0E9] transition-colors shrink-0"
                   >
@@ -684,6 +679,24 @@
                 </p>
               </div>
 
+              <div>
+                <span class="block text-[11px] uppercase tracking-[0.16em] text-[#9A9E9B] mb-1.5">Social Media</span>
+                <a
+                  href="https://www.facebook.com/p/Friends-Room-61579668841613/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-2.5 text-sm font-medium text-[#F0F0E9] hover:text-[#9A9E9B] transition-colors"
+                >
+                  <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                  </svg>
+                  <span>Friends Room pe Facebook</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </div>
+
               <div class="pt-2">
                 <a
                   href="https://www.google.com/maps/place/Friends+Room+Billiards/@44.9406617,24.8053187,9z/data=!4m10!1m2!2m1!1sbilliards!3m6!1s0x40b249ded848c84d:0x36b24d03ace5c5cd!8m2!3d44.9406617!4d26.0248011!15sCgIiaWxsaWFyZHP"
@@ -719,7 +732,7 @@
   <!-- Footer -->
   <footer class="border-t border-[#2F3633] bg-[#101211]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#9A9E9B]">
-      <div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-2.5 flex-wrap">
         <span class="font-display font-semibold uppercase tracking-[0.12em] text-[#F0F0E9]">
           Friends Room Billiards Club
         </span>
@@ -728,12 +741,37 @@
         <span>•</span>
         <span>© <span id="current-year"></span></span>
       </div>
-      <div class="flex items-center gap-6">
+
+      <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
         <a href="#acasa" class="hover:text-[#F0F0E9] transition-colors">Acasă</a>
         <a href="#club" class="hover:text-[#F0F0E9] transition-colors">Club</a>
         <a href="#comunitate" class="hover:text-[#F0F0E9] transition-colors">Comunitate</a>
         <a href="#concursuri" class="hover:text-[#F0F0E9] transition-colors">Concursuri</a>
         <a href="#contact" class="hover:text-[#F0F0E9] transition-colors">Contact</a>
+        <a
+          href="https://www.facebook.com/p/Friends-Room-61579668841613/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-[#F0F0E9] transition-colors"
+        >
+          Facebook
+        </a>
+        <button
+          id="nav-admin-btn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors"
+        >
+          <span id="nav-admin-dot" class="w-1.5 h-1.5 rounded-full bg-[#6E7370]"></span>
+          <span id="nav-admin-label">Admin</span>
+        </button>
+        <button
+          id="nav-logout-btn"
+          type="button"
+          title="Deconectare"
+          class="hidden px-2.5 py-1 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-[11px] font-medium uppercase tracking-[0.1em] text-[#F2B8B5] hover:text-white transition-colors"
+        >
+          <span>Ieșire</span>
+        </button>
       </div>
     </div>
   </footer>
@@ -987,6 +1025,7 @@
     }
 
     let tournamentsState = [];
+    let hasLoadedTournaments = false;
     let activeFilter = 'Toate';
     let pendingDeleteId = null;
     let currentAdminUser = null;
@@ -1014,6 +1053,13 @@
       const grid = document.getElementById('tournaments-grid');
       const emptyBox = document.getElementById('tournaments-empty');
       const loggedIn = isAdminAuthenticated();
+
+      if (!hasLoadedTournaments) {
+        if (loadingBox) loadingBox.classList.remove('hidden');
+        grid.classList.add('hidden');
+        emptyBox.classList.add('hidden');
+        return;
+      }
 
       if (loadingBox) loadingBox.classList.add('hidden');
 
@@ -1478,6 +1524,7 @@
 
         const editId = target.getAttribute('data-edit-id');
         if (editId) {
+          pendingDeleteId = null;
           const item = tournamentsState.find((ev) => ev.id === editId);
           if (item) {
             editingIdInput.value = item.id;
@@ -1490,6 +1537,7 @@
             formPanelTitle.textContent = 'Editează concursul';
             submitTournamentBtn.textContent = 'Salvează modificările';
             cancelEditBtn.classList.remove('hidden');
+            renderTournaments();
             tournamentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
           return;
@@ -1524,9 +1572,11 @@
       document.getElementById('tournaments-grid').addEventListener('click', handleTournamentActionClick);
       document.getElementById('admin-tournaments-list').addEventListener('click', handleTournamentActionClick);
 
-      document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+      const changePasswordForm = document.getElementById('change-password-form');
+      const changePasswordBtn = document.getElementById('change-password-btn');
+      changePasswordForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!isAdminAuthenticated() || !firebaseAuth.currentUser) return;
+        if (!isAdminAuthenticated() || !firebaseAuth.currentUser || changePasswordBtn.disabled) return;
         const newPassInput = document.getElementById('new-admin-password');
         const msgEl = document.getElementById('password-change-msg');
         const newPass = newPassInput.value;
@@ -1536,12 +1586,19 @@
           return;
         }
 
+        changePasswordBtn.disabled = true;
+        const originalBtnText = changePasswordBtn.textContent;
+        changePasswordBtn.textContent = 'Se salvează...';
+
         try {
           await updatePassword(firebaseAuth.currentUser, newPass);
           newPassInput.value = '';
           msgEl.textContent = 'Parola Firebase a fost actualizată.';
         } catch (err) {
           msgEl.textContent = translateFirebaseError(err.code);
+        } finally {
+          changePasswordBtn.disabled = false;
+          changePasswordBtn.textContent = originalBtnText;
         }
         setTimeout(() => { msgEl.textContent = ''; }, 4000);
       });
@@ -1554,6 +1611,7 @@
       onValue(
         tournamentsRef,
         (snapshot) => {
+          hasLoadedTournaments = true;
           setFirebaseConnectionStatus(true);
           const val = snapshot.val();
           if (!val) {
@@ -1567,10 +1625,10 @@
           renderTournaments();
         },
         (error) => {
+          hasLoadedTournaments = true;
           console.error('Eroare citire Realtime Database:', error);
           setFirebaseConnectionStatus(false, 'Eroare citire Realtime Database');
-          document.getElementById('tournaments-loading')?.classList.add('hidden');
-          document.getElementById('tournaments-empty')?.classList.remove('hidden');
+          renderTournaments();
         }
       );
     }
