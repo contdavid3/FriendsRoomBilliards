@@ -2,8 +2,809 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=../#admin" />
-  <script>window.location.replace('../#admin');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101211" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin | Friends Room Billiards Club</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      background-color: #101211;
+      color: #F0F0E9;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, .font-display {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    }
+    input[type="date"],
+    input[type="time"] {
+      color-scheme: dark;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(1.3);
+      background-color: rgba(240, 240, 233, 0.14);
+      padding: 5px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body></body>
+<body class="min-h-screen bg-[#101211] text-[#F0F0E9] selection:bg-[#164D36] selection:text-[#F0F0E9]">
+
+  <!-- Ecran de autentificare (vizibil INSTANT la deschiderea /admin) -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-[2px] bg-[#191D1B] border border-[#2F3633] p-6 sm:p-8 shadow-2xl">
+      <div class="flex items-center justify-between pb-4 border-b border-[#2F3633]">
+        <div>
+          <span class="block text-[10px] uppercase tracking-[0.2em] text-[#9A9E9B]">Friends Room • Acces Restricționat</span>
+          <h1 class="font-display text-xl font-bold text-[#F0F0E9] mt-0.5">
+            Autentificare Admin
+          </h1>
+        </div>
+        <a
+          href="../"
+          class="px-2.5 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#101211] text-xs text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors"
+        >
+          ← Site
+        </a>
+      </div>
+
+      <form id="admin-login-form" class="mt-6 space-y-4">
+        <div>
+          <label for="login-identifier" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+            Email Administrator
+          </label>
+          <input
+            id="login-identifier"
+            type="email"
+            required
+            autofocus
+            placeholder="admin@friendsroom.ro"
+            autocomplete="username"
+            class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] focus:outline-none focus:border-[#164D36]"
+          />
+        </div>
+
+        <div>
+          <label for="login-password" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+            Parolă
+          </label>
+          <input
+            id="login-password"
+            type="password"
+            required
+            placeholder="Introdu parola de administrator"
+            autocomplete="current-password"
+            class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] focus:outline-none focus:border-[#164D36]"
+          />
+        </div>
+
+        <p id="login-error-msg" class="hidden text-xs text-[#E57373] bg-[#5B2323]/30 border border-[#5B2323] px-3 py-2 rounded-[2px]"></p>
+
+        <button
+          id="login-submit-btn"
+          type="submit"
+          class="w-full py-3 px-4 rounded-[2px] bg-[#164D36] hover:bg-[#1D6346] text-[#F0F0E9] font-semibold text-sm transition-colors"
+        >
+          Intră în panou
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Panou Administrare (apare imediat după autentificare) -->
+  <div id="admin-dashboard" class="hidden py-10 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#2F3633]">
+        <div>
+          <div class="flex flex-wrap items-center gap-3 mb-1.5">
+            <span class="text-[11px] font-medium uppercase tracking-[0.2em] text-[#9A9E9B]">
+              Friends Room Billiards
+            </span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-[2px] text-[11px] font-medium bg-[#191D1B] border border-[#2F3633] text-[#9A9E9B]">
+              <span id="firebase-status-dot" class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span>
+              <span id="firebase-status-text">Conectat la Firebase Realtime Database</span>
+            </span>
+          </div>
+          <h2 class="font-display text-2xl sm:text-3xl font-bold text-[#F0F0E9]">
+            Panou Administrare Concursuri
+          </h2>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a
+            href="../"
+            class="px-4 py-2.5 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-xs font-medium uppercase tracking-[0.12em] text-[#F0F0E9] transition-colors"
+          >
+            Vezi site-ul
+          </a>
+          <button
+            id="admin-logout-btn"
+            type="button"
+            class="px-4 py-2.5 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-xs font-medium uppercase tracking-[0.12em] text-[#F2B8B5] hover:text-white transition-colors"
+          >
+            Deconectare
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <!-- Formular adăugare / editare -->
+        <div class="lg:col-span-6 p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
+          <div class="flex items-center justify-between mb-5">
+            <h3 id="form-panel-title" class="font-display text-lg font-semibold text-[#F0F0E9]">
+              Adaugă un concurs nou
+            </h3>
+            <button
+              id="cancel-edit-btn"
+              type="button"
+              class="hidden text-xs text-[#9A9E9B] hover:text-[#F0F0E9] underline"
+            >
+              Anulează editarea
+            </button>
+          </div>
+
+          <form id="tournament-form" class="space-y-4">
+            <input type="hidden" id="editing-event-id" value="" />
+
+            <div>
+              <label for="event-title" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+                Titlu concurs *
+              </label>
+              <input
+                id="event-title"
+                type="text"
+                required
+                placeholder="Ex: Cupa Friends Room - Bila 9"
+                class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] focus:outline-none focus:border-[#164D36]"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label for="event-type" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+                  Tip joc *
+                </label>
+                <select
+                  id="event-type"
+                  class="w-full px-3.5 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] focus:outline-none focus:border-[#164D36]"
+                >
+                  <option value="Bila 7">Bila 7</option>
+                  <option value="Bila 8">Bila 8</option>
+                  <option value="Bila 9" selected>Bila 9</option>
+                  <option value="Bila 10">Bila 10</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="event-date" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+                  Data *
+                </label>
+                <input
+                  id="event-date"
+                  type="date"
+                  required
+                  class="w-full px-3.5 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] focus:outline-none focus:border-[#164D36]"
+                />
+              </div>
+
+              <div>
+                <label for="event-time" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+                  Ora *
+                </label>
+                <input
+                  id="event-time"
+                  type="time"
+                  required
+                  value="18:00"
+                  class="w-full px-3.5 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] focus:outline-none focus:border-[#164D36]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="event-link" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+                Link înscriere / tablou extern (opțional)
+              </label>
+              <input
+                id="event-link"
+                type="text"
+                placeholder="https://..."
+                class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] focus:outline-none focus:border-[#164D36]"
+              />
+            </div>
+
+            <div>
+              <label for="event-description" class="block text-xs font-medium uppercase tracking-[0.14em] text-[#9A9E9B] mb-2">
+                Descriere / Regulament (opțional)
+              </label>
+              <textarea
+                id="event-description"
+                rows="3"
+                placeholder="Detalii despre competiție, taxă de participare sau sistem de joc..."
+                class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] focus:outline-none focus:border-[#164D36]"
+              ></textarea>
+            </div>
+
+            <p id="form-feedback-msg" class="hidden text-xs text-[#2E9E6B]"></p>
+
+            <button
+              type="submit"
+              id="submit-tournament-btn"
+              class="w-full py-3.5 px-4 rounded-[2px] bg-[#164D36] hover:bg-[#1D6346] text-[#F0F0E9] font-semibold text-sm transition-colors"
+            >
+              Publică concursul
+            </button>
+          </form>
+
+          <!-- Schimbare parolă -->
+          <div class="mt-8 pt-6 border-t border-[#2F3633]">
+            <h4 class="text-xs font-semibold uppercase tracking-[0.16em] text-[#9A9E9B] mb-4">
+              Schimbare parolă Administrator
+            </h4>
+            <form id="change-password-form" class="space-y-3">
+              <input
+                id="new-admin-password"
+                type="password"
+                minlength="6"
+                required
+                placeholder="Parolă nouă (minim 6 caractere)"
+                class="w-full px-4 py-2.5 rounded-[2px] bg-[#101211] border border-[#2F3633] text-[#F0F0E9] placeholder-[#6E7370] text-sm focus:outline-none focus:border-[#164D36]"
+              />
+              <div class="flex items-center justify-between gap-3">
+                <span id="password-change-msg" class="text-xs text-[#9A9E9B]"></span>
+                <button
+                  id="change-password-btn"
+                  type="submit"
+                  class="px-4 py-2 rounded-[2px] border border-[#2F3633] bg-[#101211] hover:border-[#4A5550] text-xs font-medium uppercase tracking-[0.12em] text-[#F0F0E9] transition-colors shrink-0"
+                >
+                  Actualizează parola
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Lista concursurilor -->
+        <div class="lg:col-span-6 p-6 rounded-[2px] bg-[#191D1B] border border-[#2F3633]">
+          <div class="flex items-center justify-between gap-3 mb-5">
+            <h3 class="font-display text-lg font-semibold text-[#F0F0E9]">
+              Concursuri publicate (<span id="admin-tournaments-count">0</span>)
+            </h3>
+            <button
+              id="seed-demo-btn"
+              type="button"
+              class="hidden px-3 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#101211] hover:border-[#164D36] text-[11px] uppercase tracking-[0.1em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors"
+            >
+              + Adaugă exemple
+            </button>
+          </div>
+          <div id="admin-tournaments-list" class="space-y-3">
+            <p class="text-sm text-[#9A9E9B]">Se încarcă lista concursurilor...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import {
+      initializeAppCheck,
+      ReCaptchaEnterpriseProvider
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app-check.js';
+    import {
+      getAuth,
+      setPersistence,
+      browserSessionPersistence,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      updatePassword
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+    import {
+      getDatabase,
+      ref,
+      onValue,
+      push,
+      update,
+      remove,
+      serverTimestamp
+    } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC32lUY_5-NstApzP792czfGgiUlRXp77A",
+      authDomain: "friends-room-billiards.firebaseapp.com",
+      databaseURL: "https://friends-room-billiards-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "friends-room-billiards",
+      storageBucket: "friends-room-billiards.firebasestorage.app",
+      messagingSenderId: "882525586740",
+      appId: "1:882525586740:web:231091eabe127ff7521161",
+      measurementId: "G-30PTDJ5V40"
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+
+    try {
+      initializeAppCheck(firebaseApp, {
+        provider: new ReCaptchaEnterpriseProvider('6LfXpy4uAAAAAHxxRWbTfNGQLa8w1ABJSmkzaHFf'),
+        isTokenAutoRefreshEnabled: true
+      });
+    } catch (err) {
+      console.warn('App Check indisponibil:', err);
+    }
+
+    const firebaseAuth = getAuth(firebaseApp);
+    const firebaseRtdb = getDatabase(firebaseApp);
+
+    setPersistence(firebaseAuth, browserSessionPersistence).catch(() => {});
+
+    const DEFAULT_TOURNAMENTS = [
+      {
+        title: 'Open Friends Room - Bila 9',
+        gameType: 'Bila 9',
+        date: '2026-11-28',
+        time: '17:00',
+        description: 'Sistem piramidă dublă, câștigător sparge. Înscrierile se fac la bar cu 30 de minute înainte de start.',
+        externalLink: ''
+      },
+      {
+        title: 'Turneu de seară - Bila 8',
+        gameType: 'Bila 8',
+        date: '2026-12-05',
+        time: '18:00',
+        description: 'Concurs deschis jucătorilor din club, regulament standard WPA.',
+        externalLink: ''
+      },
+      {
+        title: 'Ediție de weekend - Bila 10',
+        gameType: 'Bila 10',
+        date: '2026-12-12',
+        time: '16:30',
+        description: 'Meciuri cu lovitură anunțată. Detalii și înscrieri la bar.',
+        externalLink: ''
+      }
+    ];
+
+    const RO_MONTHS_SHORT = ['ian.', 'feb.', 'mar.', 'apr.', 'mai', 'iun.', 'iul.', 'aug.', 'sept.', 'oct.', 'nov.', 'dec.'];
+
+    function formatDateRo(dateStr) {
+      const clean = String(dateStr || '').trim();
+      const match = clean.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return clean || 'Dată nestabilită';
+      const monthIdx = parseInt(match[2], 10) - 1;
+      const day = parseInt(match[3], 10);
+      if (monthIdx < 0 || monthIdx > 11 || isNaN(day)) return clean;
+      return `${day} ${RO_MONTHS_SHORT[monthIdx]} ${match[1]}`;
+    }
+
+    function normalizeExternalUrl(rawUrl) {
+      let trimmed = String(rawUrl || '').trim();
+      if (!trimmed) return '';
+      if (!/^https?:\/\//i.test(trimmed)) trimmed = 'https://' + trimmed;
+      try {
+        const parsed = new URL(trimmed);
+        if (!/^https?:$/i.test(parsed.protocol)) return '';
+        if (!parsed.hostname || !parsed.hostname.includes('.')) return '';
+        return parsed.toString();
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function translateFirebaseError(code) {
+      switch (code) {
+        case 'auth/invalid-email':
+          return 'Adresa de email nu este validă.';
+        case 'auth/user-disabled':
+          return 'Acest cont de administrator este dezactivat.';
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+          return 'Email sau parolă incorectă.';
+        case 'auth/too-many-requests':
+          return 'Prea multe încercări. Așteaptă câteva minute.';
+        case 'auth/requires-recent-login':
+          return 'Deconectează-te și autentifică-te din nou înainte de a schimba parola.';
+        case 'auth/firebase-app-check-token-is-invalid':
+          return 'Verificarea de securitate App Check a eșuat. Reîncarcă pagina.';
+        case 'PERMISSION_DENIED':
+          return 'Acces refuzat de regulile Realtime Database.';
+        default:
+          return 'Eroare la conectare. Verifică datele sau regulile Firebase.';
+      }
+    }
+
+    let tournamentsState = [];
+    let pendingDeleteId = null;
+    let currentAdminUser = null;
+
+    const loginScreen = document.getElementById('login-screen');
+    const adminDashboard = document.getElementById('admin-dashboard');
+    const loginForm = document.getElementById('admin-login-form');
+    const loginError = document.getElementById('login-error-msg');
+    const loginSubmitBtn = document.getElementById('login-submit-btn');
+    const userInput = document.getElementById('login-identifier');
+    const passInput = document.getElementById('login-password');
+
+    // Protecție încercări greșite
+    const LOCKOUT_STORAGE_KEY = 'fr_admin_login_guard';
+    let lockoutTimer = null;
+
+    function getLockoutState() {
+      try {
+        const raw = localStorage.getItem(LOCKOUT_STORAGE_KEY);
+        if (!raw) return { fails: 0, lockUntil: 0, penaltyStep: 0 };
+        const parsed = JSON.parse(raw);
+        return {
+          fails: Number(parsed.fails) || 0,
+          lockUntil: Number(parsed.lockUntil) || 0,
+          penaltyStep: Number(parsed.penaltyStep) || 0
+        };
+      } catch (e) {
+        return { fails: 0, lockUntil: 0, penaltyStep: 0 };
+      }
+    }
+
+    function saveLockoutState(state) {
+      try { localStorage.setItem(LOCKOUT_STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    }
+
+    function clearLockoutState() {
+      try { localStorage.removeItem(LOCKOUT_STORAGE_KEY); } catch (e) {}
+      if (lockoutTimer) {
+        clearInterval(lockoutTimer);
+        lockoutTimer = null;
+      }
+    }
+
+    function updateLockoutUI() {
+      const state = getLockoutState();
+      const now = Date.now();
+      if (state.lockUntil > now) {
+        const remainingSec = Math.ceil((state.lockUntil - now) / 1000);
+        loginSubmitBtn.disabled = true;
+        loginSubmitBtn.textContent = `Blocat (${remainingSec}s)`;
+        loginError.textContent = `Prea multe încercări greșite. Mai așteaptă ${remainingSec} secunde.`;
+        loginError.classList.remove('hidden');
+
+        if (!lockoutTimer) {
+          lockoutTimer = setInterval(() => {
+            const current = getLockoutState();
+            if (current.lockUntil <= Date.now()) {
+              clearInterval(lockoutTimer);
+              lockoutTimer = null;
+              loginSubmitBtn.disabled = false;
+              loginSubmitBtn.textContent = 'Intră în panou';
+              loginError.classList.add('hidden');
+            } else {
+              const sec = Math.ceil((current.lockUntil - Date.now()) / 1000);
+              loginSubmitBtn.textContent = `Blocat (${sec}s)`;
+              loginError.textContent = `Prea multe încercări greșite. Mai așteaptă ${sec} secunde.`;
+            }
+          }, 500);
+        }
+        return true;
+      }
+      return false;
+    }
+
+    updateLockoutUI();
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (updateLockoutUI()) return;
+
+      loginError.classList.add('hidden');
+      const emailVal = userInput.value.trim();
+      const passVal = passInput.value;
+
+      loginSubmitBtn.disabled = true;
+      loginSubmitBtn.textContent = 'Se verifică...';
+      try {
+        await setPersistence(firebaseAuth, browserSessionPersistence);
+        await signInWithEmailAndPassword(firebaseAuth, emailVal, passVal);
+        clearLockoutState();
+        passInput.value = '';
+      } catch (err) {
+        const state = getLockoutState();
+        const nextFails = state.fails + 1;
+        if (nextFails >= 3) {
+          const nextStep = state.penaltyStep + 1;
+          const durationMs = 30000 * Math.pow(2, nextStep - 1);
+          saveLockoutState({
+            fails: 0,
+            lockUntil: Date.now() + durationMs,
+            penaltyStep: nextStep
+          });
+          updateLockoutUI();
+        } else {
+          saveLockoutState({
+            fails: nextFails,
+            lockUntil: 0,
+            penaltyStep: state.penaltyStep
+          });
+          const remainingTries = 3 - nextFails;
+          loginError.textContent = `${translateFirebaseError(err.code)} (Mai ai ${remainingTries} ${remainingTries === 1 ? 'încercare' : 'încercări'}.)`;
+          loginError.classList.remove('hidden');
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = 'Intră în panou';
+        }
+      }
+    });
+
+    const tournamentsRef = ref(firebaseRtdb, 'tournaments');
+
+    function renderAdminList() {
+      const listEl = document.getElementById('admin-tournaments-list');
+      const countEl = document.getElementById('admin-tournaments-count');
+      const seedBtn = document.getElementById('seed-demo-btn');
+
+      const sortedAll = tournamentsState.slice().sort((a, b) =>
+        `${a.date || ''} ${a.time || ''}`.localeCompare(`${b.date || ''} ${b.time || ''}`)
+      );
+
+      countEl.textContent = String(sortedAll.length);
+      if (sortedAll.length === 0) seedBtn.classList.remove('hidden');
+      else seedBtn.classList.add('hidden');
+
+      if (!sortedAll.length) {
+        listEl.innerHTML = '<p class="text-sm text-[#9A9E9B]">Nu există concursuri publicate momentan. Poți adăuga unul din formular sau poți apăsa „+ Adaugă exemple”.</p>';
+        return;
+      }
+
+      listEl.innerHTML = sortedAll.map((ev) => {
+        const isConfirming = pendingDeleteId === ev.id;
+        return `
+          <div class="p-4 rounded-[2px] bg-[#101211] border border-[#2F3633] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2 text-xs text-[#9A9E9B] mb-1">
+                <span class="text-[#F0F0E9] font-medium">${escapeHtml(ev.gameType || 'Bila 8')}</span>
+                <span>•</span>
+                <span>${escapeHtml(formatDateRo(ev.date))}${ev.time ? ' (' + escapeHtml(ev.time) + ')' : ''}</span>
+              </div>
+              <h4 class="text-sm font-semibold text-[#F0F0E9]">${escapeHtml(ev.title || 'Concurs Friends Room')}</h4>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" data-edit-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-xs text-[#F0F0E9] transition-colors">
+                Editează
+              </button>
+              ${isConfirming
+                ? `<button type="button" data-confirm-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] bg-[#7A2828] hover:bg-[#963232] text-xs font-medium text-[#F0F0E9] transition-colors">Confirmă ștergerea</button>
+                   <button type="button" data-cancel-delete="1" class="px-2.5 py-1.5 rounded-[2px] border border-[#2F3633] text-xs text-[#9A9E9B]">Anulează</button>`
+                : `<button type="button" data-delete-id="${escapeHtml(ev.id)}" class="px-3 py-1.5 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-xs text-[#F2B8B5] hover:text-white transition-colors">Șterge</button>`}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    const tournamentForm = document.getElementById('tournament-form');
+    const editingIdInput = document.getElementById('editing-event-id');
+    const formPanelTitle = document.getElementById('form-panel-title');
+    const submitTournamentBtn = document.getElementById('submit-tournament-btn');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const formFeedbackMsg = document.getElementById('form-feedback-msg');
+
+    function showFormFeedback(msg, isError = false) {
+      formFeedbackMsg.textContent = msg;
+      formFeedbackMsg.className = isError ? 'text-xs text-[#E57373]' : 'text-xs text-[#2E9E6B]';
+      formFeedbackMsg.classList.remove('hidden');
+      setTimeout(() => formFeedbackMsg.classList.add('hidden'), 4500);
+    }
+
+    function resetTournamentForm() {
+      editingIdInput.value = '';
+      tournamentForm.reset();
+      document.getElementById('event-type').value = 'Bila 9';
+      document.getElementById('event-time').value = '18:00';
+      formPanelTitle.textContent = 'Adaugă un concurs nou';
+      submitTournamentBtn.textContent = 'Publică concursul';
+      cancelEditBtn.classList.add('hidden');
+    }
+
+    cancelEditBtn.addEventListener('click', resetTournamentForm);
+
+    tournamentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentAdminUser) return;
+
+      const rawLink = document.getElementById('event-link').value.trim();
+      let normalizedLink = '';
+      if (rawLink) {
+        normalizedLink = normalizeExternalUrl(rawLink);
+        if (!normalizedLink) {
+          showFormFeedback('Link-ul introdus nu este valid (folosește https://...).', true);
+          return;
+        }
+      }
+
+      const payload = {
+        title: document.getElementById('event-title').value.trim(),
+        gameType: document.getElementById('event-type').value,
+        date: document.getElementById('event-date').value,
+        time: document.getElementById('event-time').value,
+        externalLink: normalizedLink,
+        description: document.getElementById('event-description').value.trim()
+      };
+
+      if (!payload.title || !payload.date || !payload.time) return;
+
+      const editId = editingIdInput.value;
+      submitTournamentBtn.disabled = true;
+      submitTournamentBtn.textContent = 'Se salvează...';
+
+      try {
+        if (editId) {
+          await update(ref(firebaseRtdb, `tournaments/${editId}`), payload);
+          showFormFeedback('Concursul a fost actualizat.');
+        } else {
+          await push(tournamentsRef, { ...payload, createdAt: serverTimestamp() });
+          showFormFeedback('Concursul a fost publicat live.');
+        }
+        resetTournamentForm();
+      } catch (err) {
+        showFormFeedback(translateFirebaseError(err.code), true);
+      } finally {
+        submitTournamentBtn.disabled = false;
+        submitTournamentBtn.textContent = editingIdInput.value ? 'Salvează modificările' : 'Publică concursul';
+      }
+    });
+
+    const seedDemoBtn = document.getElementById('seed-demo-btn');
+    seedDemoBtn.addEventListener('click', async () => {
+      if (!currentAdminUser || seedDemoBtn.disabled) return;
+      seedDemoBtn.disabled = true;
+      seedDemoBtn.textContent = 'Se adaugă...';
+      try {
+        for (const item of DEFAULT_TOURNAMENTS) {
+          await push(tournamentsRef, { ...item, createdAt: serverTimestamp() });
+        }
+        showFormFeedback('Concursurile demonstrative au fost adăugate.');
+      } catch (err) {
+        showFormFeedback(translateFirebaseError(err.code), true);
+      } finally {
+        seedDemoBtn.disabled = false;
+        seedDemoBtn.textContent = '+ Adaugă exemple';
+      }
+    });
+
+    document.getElementById('admin-tournaments-list').addEventListener('click', async (e) => {
+      if (!currentAdminUser) return;
+      const target = e.target.closest('button');
+      if (!target) return;
+
+      const editId = target.getAttribute('data-edit-id');
+      if (editId) {
+        pendingDeleteId = null;
+        const item = tournamentsState.find((ev) => ev.id === editId);
+        if (item) {
+          editingIdInput.value = item.id;
+          document.getElementById('event-title').value = item.title || '';
+          document.getElementById('event-type').value = item.gameType || 'Bila 9';
+          document.getElementById('event-date').value = item.date || '';
+          document.getElementById('event-time').value = item.time || '18:00';
+          document.getElementById('event-link').value = item.externalLink || '';
+          document.getElementById('event-description').value = item.description || '';
+          formPanelTitle.textContent = 'Editează concursul';
+          submitTournamentBtn.textContent = 'Salvează modificările';
+          cancelEditBtn.classList.remove('hidden');
+          renderAdminList();
+          tournamentForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
+      const deleteId = target.getAttribute('data-delete-id');
+      if (deleteId) {
+        pendingDeleteId = deleteId;
+        renderAdminList();
+        return;
+      }
+
+      if (target.getAttribute('data-cancel-delete')) {
+        pendingDeleteId = null;
+        renderAdminList();
+        return;
+      }
+
+      const confirmDeleteId = target.getAttribute('data-confirm-delete-id');
+      if (confirmDeleteId) {
+        target.disabled = true;
+        pendingDeleteId = null;
+        try {
+          await remove(ref(firebaseRtdb, `tournaments/${confirmDeleteId}`));
+          if (editingIdInput.value === confirmDeleteId) resetTournamentForm();
+        } catch (err) {
+          showFormFeedback(translateFirebaseError(err.code), true);
+        }
+      }
+    });
+
+    const changePasswordForm = document.getElementById('change-password-form');
+    const changePasswordBtn = document.getElementById('change-password-btn');
+    changePasswordForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!firebaseAuth.currentUser || changePasswordBtn.disabled) return;
+      const newPassInput = document.getElementById('new-admin-password');
+      const msgEl = document.getElementById('password-change-msg');
+      const newPass = newPassInput.value;
+
+      if (!newPass || newPass.length < 6) {
+        msgEl.textContent = 'Minim 6 caractere.';
+        return;
+      }
+
+      changePasswordBtn.disabled = true;
+      changePasswordBtn.textContent = 'Se salvează...';
+      try {
+        await updatePassword(firebaseAuth.currentUser, newPass);
+        newPassInput.value = '';
+        msgEl.textContent = 'Parola a fost actualizată.';
+      } catch (err) {
+        msgEl.textContent = translateFirebaseError(err.code);
+      } finally {
+        changePasswordBtn.disabled = false;
+        changePasswordBtn.textContent = 'Actualizează parola';
+      }
+      setTimeout(() => { msgEl.textContent = ''; }, 4000);
+    });
+
+    document.getElementById('admin-logout-btn').addEventListener('click', async () => {
+      pendingDeleteId = null;
+      resetTournamentForm();
+      await signOut(firebaseAuth);
+    });
+
+    onAuthStateChanged(firebaseAuth, (user) => {
+      currentAdminUser = user;
+      if (user) {
+        loginScreen.classList.add('hidden');
+        adminDashboard.classList.remove('hidden');
+      } else {
+        adminDashboard.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
+        if (!updateLockoutUI()) {
+          loginSubmitBtn.disabled = false;
+          loginSubmitBtn.textContent = 'Intră în panou';
+        }
+        userInput.focus();
+      }
+    });
+
+    onValue(
+      tournamentsRef,
+      (snapshot) => {
+        document.getElementById('firebase-status-dot').className = 'w-1.5 h-1.5 rounded-full bg-[#2E9E6B]';
+        document.getElementById('firebase-status-text').textContent = 'Conectat la Firebase Realtime Database';
+        const val = snapshot.val();
+        tournamentsState = val
+          ? Object.keys(val).map((key) => ({ id: key, ...val[key] }))
+          : [];
+        renderAdminList();
+      },
+      () => {
+        document.getElementById('firebase-status-dot').className = 'w-1.5 h-1.5 rounded-full bg-[#E57373]';
+        document.getElementById('firebase-status-text').textContent = 'Eroare conexiune Realtime Database';
+      }
+    );
+  </script>
+</body>
 </html>
