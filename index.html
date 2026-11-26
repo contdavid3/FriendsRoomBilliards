@@ -467,7 +467,7 @@
       </div>
     </section>
 
-    <!-- Panou administrare -->
+    <!-- Panou administrare (Vizibil DOAR după autentificare) -->
     <section id="admin-panel" class="hidden py-16 sm:py-20 border-b border-[#2F3633] bg-[#141716]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#2F3633]">
@@ -729,7 +729,7 @@
     </section>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer (Fără buton Admin pentru vizitatori; controalele apar doar când ești autentificat) -->
   <footer class="border-t border-[#2F3633] bg-[#101211]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#9A9E9B]">
       <div class="flex items-center gap-2.5 flex-wrap">
@@ -756,27 +756,29 @@
         >
           Facebook
         </a>
-        <button
-          id="nav-admin-btn"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-[11px] font-medium uppercase tracking-[0.1em] text-[#9A9E9B] hover:text-[#F0F0E9] transition-colors"
-        >
-          <span id="nav-admin-dot" class="w-1.5 h-1.5 rounded-full bg-[#6E7370]"></span>
-          <span id="nav-admin-label">Admin</span>
-        </button>
-        <button
-          id="nav-logout-btn"
-          type="button"
-          title="Deconectare"
-          class="hidden px-2.5 py-1 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-[11px] font-medium uppercase tracking-[0.1em] text-[#F2B8B5] hover:text-white transition-colors"
-        >
-          <span>Ieșire</span>
-        </button>
+
+        <div id="footer-admin-controls" class="hidden inline-flex items-center gap-2">
+          <a
+            href="#admin-panel"
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[2px] border border-[#2F3633] bg-[#191D1B] hover:border-[#4A5550] text-[11px] font-medium uppercase tracking-[0.1em] text-[#F0F0E9] transition-colors"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-[#2E9E6B]"></span>
+            <span>Panou Admin</span>
+          </a>
+          <button
+            id="nav-logout-btn"
+            type="button"
+            title="Deconectare"
+            class="px-2.5 py-1 rounded-[2px] border border-[#5B2323] bg-[#5B2323]/25 hover:bg-[#5B2323] text-[11px] font-medium uppercase tracking-[0.1em] text-[#F2B8B5] hover:text-white transition-colors"
+          >
+            Ieșire
+          </button>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- Modal autentificare admin -->
+  <!-- Modal autentificare admin (se deschide la accesarea linkului cu #admin / /admin) -->
   <div
     id="admin-login-modal"
     class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
@@ -1024,6 +1026,34 @@
       }
     }
 
+    function isAdminRouteRequested() {
+      const hash = (window.location.hash || '').toLowerCase();
+      const search = (window.location.search || '').toLowerCase();
+      const path = (window.location.pathname || '').replace(/\/+$/, '').toLowerCase();
+      return (
+        hash === '#admin' ||
+        hash.startsWith('#admin?') ||
+        /(?:^\?|&)admin(?:=|&|$)/.test(search) ||
+        path.endsWith('/admin')
+      );
+    }
+
+    function clearAdminRouteFromUrl() {
+      try {
+        const url = new URL(window.location.href);
+        if (url.hash.toLowerCase().startsWith('#admin')) {
+          url.hash = '';
+        }
+        if (url.searchParams.has('admin')) {
+          url.searchParams.delete('admin');
+        }
+        if (url.pathname.replace(/\/+$/, '').toLowerCase().endsWith('/admin')) {
+          url.pathname = url.pathname.replace(/\/admin\/?$/i, '/');
+        }
+        window.history.replaceState({}, document.title, url.toString());
+      } catch (e) {}
+    }
+
     let tournamentsState = [];
     let hasLoadedTournaments = false;
     let activeFilter = 'Toate';
@@ -1186,22 +1216,14 @@
     function syncAdminUI() {
       const loggedIn = isAdminAuthenticated();
       const panel = document.getElementById('admin-panel');
-      const dot = document.getElementById('nav-admin-dot');
-      const label = document.getElementById('nav-admin-label');
-      const navLogoutBtn = document.getElementById('nav-logout-btn');
+      const footerAdminControls = document.getElementById('footer-admin-controls');
 
       if (loggedIn) {
         panel.classList.remove('hidden');
-        dot.classList.remove('bg-[#6E7370]');
-        dot.classList.add('bg-[#2E9E6B]');
-        label.textContent = 'Panou Admin';
-        if (navLogoutBtn) navLogoutBtn.classList.remove('hidden');
+        if (footerAdminControls) footerAdminControls.classList.remove('hidden');
       } else {
         panel.classList.add('hidden');
-        dot.classList.remove('bg-[#2E9E6B]');
-        dot.classList.add('bg-[#6E7370]');
-        label.textContent = 'Admin';
-        if (navLogoutBtn) navLogoutBtn.classList.add('hidden');
+        if (footerAdminControls) footerAdminControls.classList.add('hidden');
       }
 
       renderTournaments();
@@ -1210,6 +1232,7 @@
     async function performAdminLogout() {
       pendingDeleteId = null;
       if (typeof onLogoutCleanup === 'function') onLogoutCleanup();
+      clearAdminRouteFromUrl();
       await signOut(firebaseAuth);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1267,7 +1290,6 @@
       });
 
       const loginModal = document.getElementById('admin-login-modal');
-      const navAdminBtn = document.getElementById('nav-admin-btn');
       const closeModalBtn = document.getElementById('close-login-modal-btn');
       const loginForm = document.getElementById('admin-login-form');
       const loginError = document.getElementById('login-error-msg');
@@ -1354,24 +1376,30 @@
         }
       }
 
-      function closeLoginModal() {
+      function closeLoginModal(cleanUrl = true) {
         loginModal.classList.add('hidden');
+        if (cleanUrl) clearAdminRouteFromUrl();
       }
 
-      navAdminBtn.addEventListener('click', () => {
+      function handleAdminUrlAccess() {
+        if (!isAdminRouteRequested()) return;
         if (isAdminAuthenticated()) {
+          clearAdminRouteFromUrl();
           document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
         } else {
           openLoginModal();
         }
-      });
+      }
 
-      closeModalBtn.addEventListener('click', closeLoginModal);
+      window.addEventListener('hashchange', handleAdminUrlAccess);
+      window.addEventListener('popstate', handleAdminUrlAccess);
+
+      closeModalBtn.addEventListener('click', () => closeLoginModal(true));
       loginModal.addEventListener('click', (e) => {
-        if (e.target === loginModal) closeLoginModal();
+        if (e.target === loginModal) closeLoginModal(true);
       });
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !loginModal.classList.contains('hidden')) closeLoginModal();
+        if (e.key === 'Escape' && !loginModal.classList.contains('hidden')) closeLoginModal(true);
       });
 
       loginForm.addEventListener('submit', async (e) => {
@@ -1388,7 +1416,7 @@
           await setPersistence(firebaseAuth, browserSessionPersistence);
           await signInWithEmailAndPassword(firebaseAuth, emailVal, passVal);
           clearLockoutState();
-          closeLoginModal();
+          closeLoginModal(true);
           setTimeout(() => {
             document.getElementById('admin-panel')?.scrollIntoView({ behavior: 'smooth' });
           }, 100);
@@ -1603,9 +1631,14 @@
         setTimeout(() => { msgEl.textContent = ''; }, 4000);
       });
 
+      let initialAuthChecked = false;
       onAuthStateChanged(firebaseAuth, (user) => {
         currentAdminUser = user;
         syncAdminUI();
+        if (!initialAuthChecked) {
+          initialAuthChecked = true;
+          handleAdminUrlAccess();
+        }
       });
 
       onValue(
